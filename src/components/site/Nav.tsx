@@ -1,14 +1,15 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { label: "Wedding", href: "#work" },
-  { label: "Ad Commercials", href: "#work" },
-  { label: "Fashion Editorial", href: "#work" },
-  { label: "Media Production", href: "#work" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
+  { label: "Wedding", href: "/wedding" },
+  { label: "Ad Commercials", href: "/ad-commercials" },
+  { label: "Fashion Editorial", href: "/fashion-editorial" },
+  { label: "Media Production", href: "/media-production" },
+  { label: "About", href: "/#about" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const Nav = () => {
@@ -26,9 +27,9 @@ export const Nav = () => {
           <span className="eyebrow hidden sm:inline">Menu</span>
         </button>
 
-        <a href="#top" className="font-display text-lg md:text-xl tracking-tight text-foreground">
+        <Link to="/" className="font-display text-lg md:text-xl tracking-tight text-foreground">
           Mad<span className="text-primary">.</span>Feelms
-        </a>
+        </Link>
       </header>
 
       <AnimatePresence>
@@ -57,13 +58,13 @@ export const Nav = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.6, delay: 0.1 + i * 0.06, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <a
-                        href={item.href}
+                      <Link
+                        to={item.href}
                         onClick={() => setOpen(false)}
                         className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground hover:text-primary transition-colors duration-500 block"
                       >
                         {item.label}
-                      </a>
+                      </Link>
                     </motion.li>
                   ))}
                 </ul>
