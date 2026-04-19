@@ -2,58 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Mad Feelms — Warm Cinematic Design System
-   Charcoal night, cream light, muted ember accent.
+/* Mad Feelms — Brand Identity Design System
+   Pure black background, white text, ED3101 red accent.
    All colors HSL. Tokens only — no ad-hoc colors in components.
 */
 
 @layer base {
   :root {
-    /* Core palette */
-    --background: 24 10% 7%;          /* deep charcoal */
-    --foreground: 38 28% 92%;         /* warm cream */
+    /* Core palette — MF brand */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
 
-    --surface: 24 10% 10%;
-    --surface-elevated: 24 9% 13%;
+    --surface: 0 0% 4%;
+    --surface-elevated: 0 0% 8%;
 
-    --card: 24 10% 9%;
-    --card-foreground: 38 28% 92%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 100%;
 
-    --popover: 24 10% 9%;
-    --popover-foreground: 38 28% 92%;
+    --popover: 0 0% 4%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 35 55% 60%;            /* muted ember/gold */
-    --primary-foreground: 24 12% 8%;
+    --primary: 14 99% 47%;             /* ED3101 — MF red */
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 24 8% 16%;
-    --secondary-foreground: 38 25% 88%;
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 0 0% 96%;
 
-    --muted: 24 8% 14%;
-    --muted-foreground: 35 12% 62%;
+    --muted: 0 0% 8%;
+    --muted-foreground: 0 0% 60%;
 
-    --accent: 18 45% 55%;             /* warm terracotta */
-    --accent-foreground: 38 28% 95%;
+    --accent: 14 99% 47%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 65% 55%;
-    --destructive-foreground: 38 28% 95%;
+    --destructive: 14 99% 47%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 30 10% 18%;
-    --input: 30 10% 18%;
-    --ring: 35 55% 60%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 14 99% 47%;
 
-    --radius: 0.25rem;
+    --radius: 0rem;
 
-    /* Gradients */
-    --gradient-vignette: radial-gradient(ellipse at center, transparent 40%, hsl(var(--background) / 0.85) 100%);
-    --gradient-ember: linear-gradient(135deg, hsl(35 55% 60%), hsl(18 50% 50%));
+    --gradient-vignette: radial-gradient(ellipse at center, transparent 40%, hsl(var(--background) / 0.9) 100%);
+    --gradient-ember: linear-gradient(135deg, hsl(14 99% 47%), hsl(14 99% 38%));
     --gradient-overlay: linear-gradient(180deg, hsl(var(--background) / 0) 0%, hsl(var(--background) / 0.4) 50%, hsl(var(--background) / 0.95) 100%);
-    --gradient-fade-down: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(24 10% 5%) 100%);
+    --gradient-fade-down: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(0 0% 0%) 100%);
 
-    /* Shadows */
-    --shadow-cinematic: 0 30px 80px -20px hsl(0 0% 0% / 0.6);
-    --shadow-glow: 0 0 60px -10px hsl(35 55% 60% / 0.35);
+    --shadow-cinematic: 0 30px 80px -20px hsl(0 0% 0% / 0.8);
+    --shadow-glow: 0 0 60px -10px hsl(14 99% 47% / 0.45);
 
-    /* Motion */
     --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
     --ease-smooth: cubic-bezier(0.65, 0, 0.35, 1);
   }
@@ -79,14 +76,25 @@
 
 @layer components {
   .font-display {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'Anton', 'Bebas Neue', 'Impact', sans-serif;
     font-optical-sizing: auto;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
   }
   .font-body {
     font-family: 'Space Grotesk', system-ui, sans-serif;
   }
   .text-balance { text-wrap: balance; }
+
+  /* Italic accents on display font: Anton has no italic, so render with subtle skew + Bebas Neue for visual variation */
+  .font-display.italic,
+  .font-display .italic {
+    font-family: 'Bebas Neue', 'Anton', 'Impact', sans-serif;
+    font-style: normal;
+    display: inline-block;
+    transform: skewX(-6deg);
+    letter-spacing: 0.01em;
+  }
 
   /* Marquee/eyebrow text */
   .eyebrow {
