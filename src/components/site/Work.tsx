@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 type Work = {
   title: string;
   category: string;
+  href: string;
   image: string;
   video?: string;
   meta: string;
@@ -13,6 +15,7 @@ const works: Work[] = [
   {
     title: "Aria & Kai",
     category: "Wedding Film",
+    href: "/wedding",
     image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80",
     video: "https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4",
     meta: "Byron Bay · 2025",
@@ -20,6 +23,7 @@ const works: Work[] = [
   {
     title: "Maison Noir",
     category: "Ad Commercial",
+    href: "/ad-commercials/maison-noir",
     image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1200&q=80",
     video: "https://videos.pexels.com/video-files/4434242/4434242-uhd_2560_1440_25fps.mp4",
     meta: "Melbourne · 2025",
@@ -27,6 +31,7 @@ const works: Work[] = [
   {
     title: "Sun & Linen",
     category: "Fashion Editorial",
+    href: "/fashion-editorial/sun-and-linen",
     image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80",
     video: "https://videos.pexels.com/video-files/5319758/5319758-uhd_2560_1440_25fps.mp4",
     meta: "Sydney · 2025",
@@ -34,6 +39,7 @@ const works: Work[] = [
   {
     title: "After Hours",
     category: "Media Production",
+    href: "/media-production",
     image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=1200&q=80",
     video: "https://videos.pexels.com/video-files/3045163/3045163-uhd_2560_1440_25fps.mp4",
     meta: "Perth · 2024",
@@ -108,8 +114,12 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
       transition={{ duration: 0.9, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      className={`group relative overflow-hidden bg-surface cursor-pointer ${aspect} ${offset}`}
+      className={`group relative overflow-hidden bg-surface ${aspect} ${offset}`}
     >
+      <Link to={work.href} aria-label={`${work.title} — ${work.category}`} className="absolute inset-0 z-20">
+        <span className="sr-only">View {work.title}</span>
+      </Link>
+
       <img
         src={work.image}
         alt={`${work.title} — ${work.category}`}
@@ -132,7 +142,7 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
       )}
 
       {/* Bottom info */}
-      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 bg-gradient-to-t from-background/90 via-background/40 to-transparent">
+      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 bg-gradient-to-t from-background/90 via-background/40 to-transparent pointer-events-none">
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="eyebrow mb-2">{work.category}</p>
@@ -146,7 +156,7 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
 
       {/* Hover overlay */}
       <div
-        className={`absolute top-6 right-6 px-3 py-1 border border-foreground/40 backdrop-blur-sm bg-background/30 transition-all duration-500 ${
+        className={`absolute top-6 right-6 px-3 py-1 border border-foreground/40 backdrop-blur-sm bg-background/30 transition-all duration-500 pointer-events-none ${
           hover ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
         }`}
       >
