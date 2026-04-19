@@ -12,7 +12,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['Fraunces', 'Georgia', 'serif'],
+        display: ['Anton', 'Bebas Neue', 'Impact', 'sans-serif'],
         body: ['Space Grotesk', 'system-ui', 'sans-serif'],
       },
       colors: {
