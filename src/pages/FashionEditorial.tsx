@@ -64,23 +64,39 @@ const Tile = ({ e }: { e: Editorial }) => {
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`group relative overflow-hidden bg-surface ${e.pos} ${e.aspect} md:aspect-auto`}
+      className={`group relative overflow-hidden bg-surface ${e.pos} ${e.aspect}`}
     >
+      <Link to={`/fashion-editorial/${e.slug}`} className="absolute inset-0 z-10 md:hidden" aria-label={e.title} />
+
       <img
         src={e.img}
         alt={`${e.title} — ${e.publication}`}
         className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
         loading="lazy"
       />
+
+      {/* Mobile: always-visible gradient. Desktop: hover-only */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/30 to-transparent md:hidden" />
       <motion.div
         animate={{ opacity: hover ? 1 : 0 }}
         transition={{ duration: 0.5 }}
-        className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent"
+        className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent hidden md:block"
       />
+
+      {/* Mobile caption — always visible, compact */}
+      <figcaption className="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:hidden">
+        <p className="eyebrow mb-1 text-[10px]">{e.publication} · {e.year}</p>
+        <h3 className="font-display text-base sm:text-lg text-foreground leading-tight mb-2">{e.title}</h3>
+        <span className="inline-flex items-center px-2.5 py-1 border border-foreground/40 bg-background/40 backdrop-blur-sm eyebrow text-[10px] text-foreground">
+          View More →
+        </span>
+      </figcaption>
+
+      {/* Desktop caption — hover reveal */}
       <motion.figcaption
         animate={{ opacity: hover ? 1 : 0, y: hover ? 0 : 20 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="absolute inset-x-0 bottom-0 p-6 md:p-8"
+        className="absolute inset-x-0 bottom-0 p-6 md:p-8 hidden md:block"
       >
         <p className="eyebrow mb-2">{e.publication} · {e.year}</p>
         <h3 className="font-display text-2xl md:text-4xl text-foreground leading-tight">{e.title}</h3>
