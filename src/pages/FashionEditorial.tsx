@@ -14,11 +14,11 @@ type Editorial = {
 };
 
 const editorials: Editorial[] = [
-  { slug: "sun-and-linen", title: "Sun & Linen", publication: "Vogue AU", year: "2025", img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=80", pos: "md:col-span-3 md:row-span-2", aspect: "aspect-[3/4]" },
-  { slug: "salt-pages", title: "Salt Pages", publication: "Russh", year: "2025", img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=80", pos: "md:col-span-3 md:row-span-1", aspect: "aspect-[4/3]" },
-  { slug: "wild-silk", title: "Wild Silk", publication: "Harper's Bazaar", year: "2024", img: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1400&q=80", pos: "md:col-span-6 md:row-span-2", aspect: "aspect-[3/4]" },
-  { slug: "atelier-light", title: "Atelier Light", publication: "Oyster", year: "2024", img: "https://images.unsplash.com/photo-1485231183945-fffde7cc051e?w=1400&q=80", pos: "md:col-span-3 md:row-span-1", aspect: "aspect-[4/3]" },
-  { slug: "noir-bloom", title: "Noir Bloom", publication: "Self Service", year: "2024", img: "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=1400&q=80", pos: "md:col-span-3 md:row-span-2", aspect: "aspect-[3/4]" },
+  { slug: "sun-and-linen", title: "Sun & Linen", publication: "Vogue AU", year: "2025", img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=80", pos: "col-span-1 row-span-2 md:col-span-3 md:row-span-2", aspect: "" },
+  { slug: "salt-pages", title: "Salt Pages", publication: "Russh", year: "2025", img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=80", pos: "col-span-1 row-span-1 md:col-span-3 md:row-span-1", aspect: "" },
+  { slug: "wild-silk", title: "Wild Silk", publication: "Harper's Bazaar", year: "2024", img: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1400&q=80", pos: "col-span-2 row-span-2 md:col-span-6 md:row-span-2", aspect: "" },
+  { slug: "atelier-light", title: "Atelier Light", publication: "Oyster", year: "2024", img: "https://images.unsplash.com/photo-1485231183945-fffde7cc051e?w=1400&q=80", pos: "col-span-1 row-span-1 md:col-span-3 md:row-span-1", aspect: "" },
+  { slug: "noir-bloom", title: "Noir Bloom", publication: "Self Service", year: "2024", img: "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=1400&q=80", pos: "col-span-1 row-span-2 md:col-span-3 md:row-span-2", aspect: "" },
 ];
 
 const FashionEditorial = () => {
