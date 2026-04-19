@@ -38,8 +38,8 @@ const FashionEditorial = () => {
         </div>
       </section>
 
-      <section className="px-6 md:px-10 pb-32">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 md:auto-rows-[260px] gap-4 md:gap-5">
+      <section className="px-4 sm:px-6 md:px-10 pb-24 md:pb-32">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-12 auto-rows-[180px] sm:auto-rows-[220px] md:auto-rows-[260px] gap-3 sm:gap-4 md:gap-5">
           {/* Left two */}
           <Tile e={editorials[0]} />
           <Tile e={editorials[1]} />
