@@ -76,9 +76,10 @@
 
 @layer components {
   .font-display {
-    font-family: 'Fraunces', Georgia, serif;
+    font-family: 'Anton', 'Bebas Neue', 'Impact', sans-serif;
     font-optical-sizing: auto;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.005em;
+    text-transform: uppercase;
   }
   .font-body {
     font-family: 'Space Grotesk', system-ui, sans-serif;
