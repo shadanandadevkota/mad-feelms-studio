@@ -114,8 +114,12 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
       transition={{ duration: 0.9, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
-      className={`group relative overflow-hidden bg-surface cursor-pointer ${aspect} ${offset}`}
+      className={`group relative overflow-hidden bg-surface ${aspect} ${offset}`}
     >
+      <Link to={work.href} aria-label={`${work.title} — ${work.category}`} className="absolute inset-0 z-20">
+        <span className="sr-only">View {work.title}</span>
+      </Link>
+
       <img
         src={work.image}
         alt={`${work.title} — ${work.category}`}
@@ -138,7 +142,7 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
       )}
 
       {/* Bottom info */}
-      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 bg-gradient-to-t from-background/90 via-background/40 to-transparent">
+      <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 bg-gradient-to-t from-background/90 via-background/40 to-transparent pointer-events-none">
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="eyebrow mb-2">{work.category}</p>
@@ -152,7 +156,7 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
 
       {/* Hover overlay */}
       <div
-        className={`absolute top-6 right-6 px-3 py-1 border border-foreground/40 backdrop-blur-sm bg-background/30 transition-all duration-500 ${
+        className={`absolute top-6 right-6 px-3 py-1 border border-foreground/40 backdrop-blur-sm bg-background/30 transition-all duration-500 pointer-events-none ${
           hover ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
         }`}
       >
