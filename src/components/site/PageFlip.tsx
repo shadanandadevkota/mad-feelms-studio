@@ -21,7 +21,7 @@ export const PageFlip = () => {
   const titleY = useTransform(scrollYProgress, [0, 0.4], ["30%", "0%"]);
 
   return (
-    <section ref={ref} className="relative h-[200vh] bg-background">
+    <section ref={ref} className="relative h-[200vh] bg-background isolate z-0">
       <div className="sticky top-0 h-screen w-full perspective-1000 flex items-center justify-center overflow-hidden">
         {/* Floating title that announces the flip */}
         <motion.div
