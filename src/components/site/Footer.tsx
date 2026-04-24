@@ -1,9 +1,22 @@
 import { Link } from "react-router-dom";
 import { Instagram, Youtube, Mail } from "lucide-react";
 import logoFull from "@/assets/mf-logo-full.png";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 export const Footer = () => {
   const year = new Date().getFullYear();
+  const { value: footer } = useSiteContent("footer", {
+    tagline:
+      "An Australian-based cinematic production house — capturing the unscripted, the considered, and everything between.",
+    email: "hello@madfeelms.com",
+    cta_label: "Start a Project →",
+    copyright_note: "Crafted with care",
+  });
+  const { value: socials } = useSiteContent("socials", {
+    instagram: "https://instagram.com/madfeelms",
+    youtube: "https://youtube.com/@madfeelms",
+    email: "hello@madfeelms.com",
+  });
   return (
     <footer className="relative isolate overflow-hidden border-t border-border/40 text-foreground">
       {/* Brand video background */}
