@@ -21,8 +21,8 @@ export const Hero = () => {
 
   // Title starts ~bottom (45% of viewport down from center) and rises to 0 (center).
   const titleY = useTransform(scrollYProgress, [0, 0.5], ["45vh", "0vh"]);
-  // Then flips up around its top edge as user keeps scrolling.
-  const titleRotateX = useTransform(scrollYProgress, [0.5, 0.95], [0, -95]);
+  // Then flips DOWN around its bottom edge — like a flipboard departure card dropping forward.
+  const titleRotateX = useTransform(scrollYProgress, [0.5, 0.95], [0, 95]);
   const titleOpacity = useTransform(scrollYProgress, [0.5, 0.95], [1, 0]);
   const titleScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 1.05]);
 
@@ -43,7 +43,7 @@ export const Hero = () => {
     <section
       ref={ref}
       id="top"
-      className="relative h-[200vh] w-full bg-background"
+      className="relative h-[200vh] w-full bg-background isolate z-10"
     >
       <div className="sticky top-0 h-screen w-full overflow-hidden vignette perspective-1000">
         {/* Background showreel */}
@@ -90,7 +90,7 @@ export const Hero = () => {
               rotateX: titleRotateX,
               opacity: titleOpacity,
               scale: titleScale,
-              transformOrigin: "50% 0%",
+              transformOrigin: "50% 100%",
             }}
             className="text-center will-change-transform"
           >
