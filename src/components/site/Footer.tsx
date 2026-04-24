@@ -73,8 +73,7 @@ export const Footer = () => {
               />
             </Link>
             <p className="text-foreground/90 mt-5 max-w-sm text-sm">
-              An Australian-based cinematic production house — capturing the unscripted,
-              the considered, and everything between.
+              {footer.tagline}
             </p>
           </div>
 
@@ -106,15 +105,15 @@ export const Footer = () => {
 
           <div className="md:col-span-4">
             <p className="eyebrow mb-4 text-foreground/80">Reach Out</p>
-            <a href="mailto:hello@madfeelms.com" className="block font-display text-xl text-foreground nav-link mb-3">
-              hello@madfeelms.com
+            <a href={`mailto:${footer.email}`} className="block font-display text-xl text-foreground nav-link mb-3">
+              {footer.email}
             </a>
             <Link to="/#contact" className="eyebrow text-foreground/90 hover:text-foreground transition-colors inline-block mt-2">
-              Start a Project →
+              {footer.cta_label}
             </Link>
             <div className="flex items-center gap-4 mt-6">
               <a
-                href="https://instagram.com/madfeelms"
+                href={socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -123,7 +122,7 @@ export const Footer = () => {
                 <Instagram className="h-5 w-5" strokeWidth={1.5} />
               </a>
               <a
-                href="https://youtube.com/@madfeelms"
+                href={socials.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
@@ -131,7 +130,7 @@ export const Footer = () => {
               >
                 <Youtube className="h-5 w-5" strokeWidth={1.5} />
               </a>
-              <a href="mailto:hello@madfeelms.com" aria-label="Email" className="text-foreground/90 hover:text-foreground transition-colors">
+              <a href={`mailto:${socials.email}`} aria-label="Email" className="text-foreground/90 hover:text-foreground transition-colors">
                 <Mail className="h-5 w-5" strokeWidth={1.5} />
               </a>
             </div>
@@ -140,7 +139,7 @@ export const Footer = () => {
 
         <div className="mt-16 pt-8 border-t border-foreground/15 flex flex-col md:flex-row gap-4 justify-between items-start md:items-center">
           <p className="eyebrow text-foreground/80">© {year} Mad Feelms · Australia</p>
-          <p className="eyebrow text-foreground/80">Crafted with care</p>
+          <p className="eyebrow text-foreground/80">{footer.copyright_note}</p>
         </div>
       </div>
     </footer>
