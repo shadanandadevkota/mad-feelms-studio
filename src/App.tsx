@@ -14,6 +14,8 @@ import FashionEditorial from "./pages/FashionEditorial.tsx";
 import FashionEditorialDetail from "./pages/FashionEditorialDetail.tsx";
 import MediaProduction from "./pages/MediaProduction.tsx";
 import NotFound from "./pages/NotFound.tsx";
+import AdminLogin from "./pages/admin/AdminLogin.tsx";
+import AdminDashboard from "./pages/admin/AdminDashboard.tsx";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +32,8 @@ const AnimatedRoutes = () => {
         <Route path="/fashion-editorial" element={<PageTransition><FashionEditorial /></PageTransition>} />
         <Route path="/fashion-editorial/:slug" element={<PageTransition><FashionEditorialDetail /></PageTransition>} />
         <Route path="/media-production" element={<PageTransition><MediaProduction /></PageTransition>} />
+        <Route path="/maddyy/login" element={<AdminLogin />} />
+        <Route path="/maddyy" element={<AdminDashboard />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
       </Routes>
