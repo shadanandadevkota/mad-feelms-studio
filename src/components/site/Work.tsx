@@ -1,50 +1,19 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useCollection } from "@/hooks/useCollection";
 
 type Work = {
+  id: string;
   title: string;
   category: string;
   href: string;
-  image: string;
-  video?: string;
-  meta: string;
+  image_url: string | null;
+  video_url: string | null;
+  meta: string | null;
+  sort_order: number;
+  is_visible: boolean;
 };
-
-const works: Work[] = [
-  {
-    title: "Aria & Kai",
-    category: "Wedding Film",
-    href: "/wedding",
-    image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200&q=80",
-    video: "https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4",
-    meta: "Byron Bay · 2025",
-  },
-  {
-    title: "Maison Noir",
-    category: "Ad Commercial",
-    href: "/ad-commercials/maison-noir",
-    image: "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=1200&q=80",
-    video: "https://videos.pexels.com/video-files/4434242/4434242-uhd_2560_1440_25fps.mp4",
-    meta: "Melbourne · 2025",
-  },
-  {
-    title: "Sun & Linen",
-    category: "Fashion Editorial",
-    href: "/fashion-editorial/sun-and-linen",
-    image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80",
-    video: "https://videos.pexels.com/video-files/5319758/5319758-uhd_2560_1440_25fps.mp4",
-    meta: "Sydney · 2025",
-  },
-  {
-    title: "After Hours",
-    category: "Media Production",
-    href: "/media-production",
-    image: "https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=1200&q=80",
-    video: "https://videos.pexels.com/video-files/3045163/3045163-uhd_2560_1440_25fps.mp4",
-    meta: "Perth · 2024",
-  },
-];
 
 export const Work = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -53,6 +22,7 @@ export const Work = () => {
     offset: ["start end", "start start"],
   });
   const sectionY = useTransform(scrollYProgress, [0, 1], ["10%", "0%"]);
+  const { items: works } = useCollection<Work>("work_items");
 
   return (
     <motion.section
@@ -78,7 +48,7 @@ export const Work = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           {works.map((w, i) => (
-            <WorkCard key={w.title} work={w} index={i} />
+            <WorkCard key={w.id} work={w} index={i} />
           ))}
         </div>
       </div>
