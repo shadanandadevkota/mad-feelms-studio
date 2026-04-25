@@ -79,6 +79,7 @@ const FilmsSection = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["8%", "0%"]);
   const radius = useTransform(scrollYProgress, [0, 1], ["48px 48px 0 0", "0px"]);
+  const { items: films } = useCollection<Film>("wedding_films");
 
   return (
     <motion.section
