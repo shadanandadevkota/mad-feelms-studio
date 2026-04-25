@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 /**
  * Hero with scroll-driven title choreography:
