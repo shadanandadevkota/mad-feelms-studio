@@ -103,19 +103,21 @@ const FilmsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {films.map((f, i) => (
             <motion.article
-              key={f.title}
+              key={f.id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="group relative aspect-[3/4] overflow-hidden bg-background"
             >
-              <img
-                src={f.img}
-                alt={`${f.title} wedding film`}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
-                loading="lazy"
-              />
+              {f.image_url && (
+                <img
+                  src={f.image_url}
+                  alt={`${f.title} wedding film`}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
+                  loading="lazy"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <p className="eyebrow mb-2">{f.place} · {f.year}</p>
