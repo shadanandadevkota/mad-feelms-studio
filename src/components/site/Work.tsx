@@ -90,13 +90,15 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
         <span className="sr-only">View {work.title}</span>
       </Link>
 
-      <img
-        src={work.image}
-        alt={`${work.title} — ${work.category}`}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
-        loading="lazy"
-      />
-      {work.video && (
+      {work.image_url && (
+        <img
+          src={work.image_url}
+          alt={`${work.title} — ${work.category}`}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+          loading="lazy"
+        />
+      )}
+      {work.video_url && (
         <video
           ref={videoRef}
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${
@@ -107,7 +109,7 @@ const WorkCard = ({ work, index }: { work: Work; index: number }) => {
           playsInline
           preload="metadata"
         >
-          <source src={work.video} type="video/mp4" />
+          <source src={work.video_url} type="video/mp4" />
         </video>
       )}
 
