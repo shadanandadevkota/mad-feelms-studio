@@ -94,17 +94,15 @@ const Hero = () => {
               <div className="relative h-full w-full overflow-hidden bg-surface">
                 <video
                   ref={videoRef}
+                  key={value.showreel_video_url}
                   className="h-full w-full object-cover"
                   autoPlay
                   muted
                   loop
                   playsInline
-                  poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80"
+                  poster={value.side_image_url}
                 >
-                  <source
-                    src="https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4"
-                    type="video/mp4"
-                  />
+                  <source src={value.showreel_video_url} type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
 
@@ -117,9 +115,9 @@ const Hero = () => {
                     animate={{ opacity: hover ? 1 : 0.85, y: hover ? 0 : 10 }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <p className="eyebrow text-foreground/80 mb-3">A Mad Feelms Studio</p>
+                    <p className="eyebrow text-foreground/80 mb-3">{value.eyebrow}</p>
                     <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9]">
-                      Wedding by <span className="italic text-primary">Maddyyy</span>
+                      {value.title_lead} <span className="italic text-primary">{value.title_accent}</span>
                     </h1>
                     <motion.div
                       animate={{ opacity: hover ? 1 : 0, y: hover ? 0 : 8 }}
