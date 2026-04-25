@@ -38,8 +38,8 @@ const Hero = () => {
         >
           <div className="aspect-[9/16] relative overflow-hidden bg-surface">
             <img
-              src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=80"
-              alt="Bride portrait — Wedding by Maddyyy"
+              src={value.side_image_url}
+              alt={`${value.title_lead} ${value.title_accent}`}
               className="absolute inset-0 h-full w-full object-cover"
               loading="eager"
             />
@@ -47,11 +47,11 @@ const Hero = () => {
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
               <p className="eyebrow mb-3">Maddyyy · Director</p>
               <h2 className="font-display text-3xl md:text-4xl text-foreground leading-[0.95]">
-                Wedding by <br />
-                <span className="italic text-primary">Maddyyy</span>
+                {value.title_lead} <br />
+                <span className="italic text-primary">{value.title_accent}</span>
               </h2>
               <p className="text-muted-foreground text-sm mt-4 max-w-xs">
-                Cinematic films that hold a marriage in motion — soft, slow, untouched.
+                {value.intro}
               </p>
 
               <div className="mt-6 grid grid-cols-2 gap-4 text-xs">
