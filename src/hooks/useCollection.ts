@@ -28,7 +28,7 @@ export function useCollection<T extends { id: string; sort_order: number; is_vis
     let q = supabase.from(table).select("*").order("sort_order", { ascending: true });
     if (opts.onlyVisible) q = q.eq("is_visible", true);
     const { data } = await q;
-    setItems((data as T[]) ?? []);
+    setItems((data as unknown as T[]) ?? []);
     setLoading(false);
   }, [table, opts.onlyVisible]);
 
