@@ -141,14 +141,16 @@ const Intro = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
+  const { value } = useSiteContent("page_wedding", {
+    philosophy: "We don't direct your day. We listen for it — for the breath before the kiss, the hand never let go.",
+  });
 
   return (
     <motion.section ref={ref} style={{ y }} className="py-24 md:py-32 px-6 md:px-10 bg-background">
       <div className="max-w-5xl mx-auto text-center">
         <p className="eyebrow mb-6">Philosophy</p>
         <p className="font-display text-3xl md:text-5xl lg:text-6xl text-foreground leading-[1.1] text-balance">
-          We don't direct your day. We <span className="italic text-primary">listen</span> for it —
-          for the breath before the kiss, the hand never let go.
+          {value.philosophy}
         </p>
       </div>
     </motion.section>
