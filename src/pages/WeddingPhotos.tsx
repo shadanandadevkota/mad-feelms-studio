@@ -2,22 +2,11 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
+import { useCollection } from "@/hooks/useCollection";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
-const photos = [
-  { src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=80", w: "md:col-span-7", aspect: "aspect-[4/5]" },
-  { src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1400&q=80", w: "md:col-span-5", aspect: "aspect-[3/4]" },
-  { src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1400&q=80", w: "md:col-span-5", aspect: "aspect-[4/3]" },
-  { src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1400&q=80", w: "md:col-span-7", aspect: "aspect-[16/10]" },
-  { src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1400&q=80", w: "md:col-span-12", aspect: "aspect-[21/9]" },
-  { src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1400&q=80", w: "md:col-span-6", aspect: "aspect-[4/5]" },
-  { src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1400&q=80", w: "md:col-span-6", aspect: "aspect-[4/5]" },
-];
-
-const films = [
-  { title: "Aria & Kai", place: "Byron Bay", year: "2025", img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80" },
-  { title: "Sienna & Marlow", place: "Margaret River", year: "2025", img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1600&q=80" },
-  { title: "Halle & Jude", place: "Tuscany", year: "2024", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=80" },
-];
+type Photo = { id: string; image_url: string; col_span: string; aspect: string; caption: string | null; sort_order: number; is_visible: boolean };
+type Film = { id: string; title: string; place: string | null; year: string | null; image_url: string | null; sort_order: number; is_visible: boolean };
 
 const WeddingPhotos = () => {
   return (
