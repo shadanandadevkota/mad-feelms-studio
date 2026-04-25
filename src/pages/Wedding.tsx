@@ -16,6 +16,15 @@ const Wedding = () => {
 const Hero = () => {
   const [hover, setHover] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { value } = useSiteContent("page_wedding", {
+    title_lead: "Wedding by",
+    title_accent: "Maddyyy",
+    eyebrow: "A Mad Feelms Studio",
+    intro: "Cinematic films that hold a marriage in motion — soft, slow, untouched.",
+    side_image_url: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=80",
+    showreel_video_url: "https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4",
+    philosophy: "We don't direct your day. We listen for it — for the breath before the kiss, the hand never let go.",
+  });
 
   return (
     <section className="relative min-h-screen w-full pt-24 md:pt-28 pb-12 px-6 md:px-10">
