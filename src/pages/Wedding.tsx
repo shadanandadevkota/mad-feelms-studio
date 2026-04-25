@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const Wedding = () => {
   return (
@@ -15,6 +16,15 @@ const Wedding = () => {
 const Hero = () => {
   const [hover, setHover] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { value } = useSiteContent("page_wedding", {
+    title_lead: "Wedding by",
+    title_accent: "Maddyyy",
+    eyebrow: "A Mad Feelms Studio",
+    intro: "Cinematic films that hold a marriage in motion — soft, slow, untouched.",
+    side_image_url: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=80",
+    showreel_video_url: "https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4",
+    philosophy: "We don't direct your day. We listen for it — for the breath before the kiss, the hand never let go.",
+  });
 
   return (
     <section className="relative min-h-screen w-full pt-24 md:pt-28 pb-12 px-6 md:px-10">
@@ -28,8 +38,8 @@ const Hero = () => {
         >
           <div className="aspect-[9/16] relative overflow-hidden bg-surface">
             <img
-              src="https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=80"
-              alt="Bride portrait — Wedding by Maddyyy"
+              src={value.side_image_url}
+              alt={`${value.title_lead} ${value.title_accent}`}
               className="absolute inset-0 h-full w-full object-cover"
               loading="eager"
             />
@@ -37,11 +47,11 @@ const Hero = () => {
             <div className="absolute inset-x-0 bottom-0 p-6 md:p-8">
               <p className="eyebrow mb-3">Maddyyy · Director</p>
               <h2 className="font-display text-3xl md:text-4xl text-foreground leading-[0.95]">
-                Wedding by <br />
-                <span className="italic text-primary">Maddyyy</span>
+                {value.title_lead} <br />
+                <span className="italic text-primary">{value.title_accent}</span>
               </h2>
               <p className="text-muted-foreground text-sm mt-4 max-w-xs">
-                Cinematic films that hold a marriage in motion — soft, slow, untouched.
+                {value.intro}
               </p>
 
               <div className="mt-6 grid grid-cols-2 gap-4 text-xs">
@@ -84,17 +94,15 @@ const Hero = () => {
               <div className="relative h-full w-full overflow-hidden bg-surface">
                 <video
                   ref={videoRef}
+                  key={value.showreel_video_url}
                   className="h-full w-full object-cover"
                   autoPlay
                   muted
                   loop
                   playsInline
-                  poster="https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80"
+                  poster={value.side_image_url}
                 >
-                  <source
-                    src="https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4"
-                    type="video/mp4"
-                  />
+                  <source src={value.showreel_video_url} type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
 
@@ -107,9 +115,9 @@ const Hero = () => {
                     animate={{ opacity: hover ? 1 : 0.85, y: hover ? 0 : 10 }}
                     transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                   >
-                    <p className="eyebrow text-foreground/80 mb-3">A Mad Feelms Studio</p>
+                    <p className="eyebrow text-foreground/80 mb-3">{value.eyebrow}</p>
                     <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9]">
-                      Wedding by <span className="italic text-primary">Maddyyy</span>
+                      {value.title_lead} <span className="italic text-primary">{value.title_accent}</span>
                     </h1>
                     <motion.div
                       animate={{ opacity: hover ? 1 : 0, y: hover ? 0 : 8 }}
@@ -133,14 +141,16 @@ const Intro = () => {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["10%", "-10%"]);
+  const { value } = useSiteContent("page_wedding", {
+    philosophy: "We don't direct your day. We listen for it — for the breath before the kiss, the hand never let go.",
+  });
 
   return (
     <motion.section ref={ref} style={{ y }} className="py-24 md:py-32 px-6 md:px-10 bg-background">
       <div className="max-w-5xl mx-auto text-center">
         <p className="eyebrow mb-6">Philosophy</p>
         <p className="font-display text-3xl md:text-5xl lg:text-6xl text-foreground leading-[1.1] text-balance">
-          We don't direct your day. We <span className="italic text-primary">listen</span> for it —
-          for the breath before the kiss, the hand never let go.
+          {value.philosophy}
         </p>
       </div>
     </motion.section>

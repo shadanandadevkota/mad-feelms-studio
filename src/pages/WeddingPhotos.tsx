@@ -2,22 +2,11 @@ import { useRef } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
+import { useCollection } from "@/hooks/useCollection";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
-const photos = [
-  { src: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1400&q=80", w: "md:col-span-7", aspect: "aspect-[4/5]" },
-  { src: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1400&q=80", w: "md:col-span-5", aspect: "aspect-[3/4]" },
-  { src: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1400&q=80", w: "md:col-span-5", aspect: "aspect-[4/3]" },
-  { src: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?w=1400&q=80", w: "md:col-span-7", aspect: "aspect-[16/10]" },
-  { src: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=1400&q=80", w: "md:col-span-12", aspect: "aspect-[21/9]" },
-  { src: "https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1400&q=80", w: "md:col-span-6", aspect: "aspect-[4/5]" },
-  { src: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=1400&q=80", w: "md:col-span-6", aspect: "aspect-[4/5]" },
-];
-
-const films = [
-  { title: "Aria & Kai", place: "Byron Bay", year: "2025", img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1600&q=80" },
-  { title: "Sienna & Marlow", place: "Margaret River", year: "2025", img: "https://images.unsplash.com/photo-1606800052052-a08af7148866?w=1600&q=80" },
-  { title: "Halle & Jude", place: "Tuscany", year: "2024", img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=1600&q=80" },
-];
+type Photo = { id: string; image_url: string; col_span: string; aspect: string; caption: string | null; sort_order: number; is_visible: boolean };
+type Film = { id: string; title: string; place: string | null; year: string | null; image_url: string | null; sort_order: number; is_visible: boolean };
 
 const WeddingPhotos = () => {
   return (
@@ -30,48 +19,59 @@ const WeddingPhotos = () => {
   );
 };
 
-const Header = () => (
-  <section className="pt-32 md:pt-40 pb-12 px-6 md:px-10">
-    <div className="max-w-7xl mx-auto">
-      <Link to="/wedding" className="eyebrow text-muted-foreground hover:text-primary transition-colors">← Back</Link>
-      <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-        <div>
-          <p className="eyebrow mb-4">Photographs · Selected</p>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9] text-balance">
-            Wedding by <span className="italic text-primary">Maddyyy</span>
-          </h1>
+const Header = () => {
+  const { value } = useSiteContent("page_wedding_photos", {
+    title_lead: "Wedding by",
+    title_accent: "Maddyyy",
+    eyebrow: "Photographs · Selected",
+    intro: "A quiet edit — chosen frames from a season of weddings, told as they happened.",
+    book_title: "Book your wedding date",
+    book_body: "Limited dates each season. Send us your date, location and a few words about the two of you.",
+  });
+  return (
+    <section className="pt-32 md:pt-40 pb-12 px-6 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <Link to="/wedding" className="eyebrow text-muted-foreground hover:text-primary transition-colors">← Back</Link>
+        <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <p className="eyebrow mb-4">{value.eyebrow}</p>
+            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9] text-balance">
+              {value.title_lead} <span className="italic text-primary">{value.title_accent}</span>
+            </h1>
+          </div>
+          <p className="text-muted-foreground max-w-sm text-sm">{value.intro}</p>
         </div>
-        <p className="text-muted-foreground max-w-sm text-sm">
-          A quiet edit — chosen frames from a season of weddings, told as they happened.
-        </p>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
-const PhotosSection = () => (
-  <section className="px-6 md:px-10 pb-32">
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
-      {photos.map((p, i) => (
-        <motion.figure
-          key={i}
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.9, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative overflow-hidden bg-surface ${p.w} ${p.aspect}`}
-        >
-          <img
-            src={p.src}
-            alt={`Wedding photo ${i + 1}`}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] hover:scale-105"
-            loading="lazy"
-          />
-        </motion.figure>
-      ))}
-    </div>
-  </section>
-);
+const PhotosSection = () => {
+  const { items: photos } = useCollection<Photo>("wedding_photos");
+  return (
+    <section className="px-6 md:px-10 pb-32">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
+        {photos.map((p, i) => (
+          <motion.figure
+            key={p.id}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className={`relative overflow-hidden bg-surface ${p.col_span} ${p.aspect}`}
+          >
+            <img
+              src={p.image_url}
+              alt={p.caption ?? `Wedding photo ${i + 1}`}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] hover:scale-105"
+              loading="lazy"
+            />
+          </motion.figure>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 /** Films section — overlaps the previous via sticky-like spacing */
 const FilmsSection = () => {
@@ -79,6 +79,7 @@ const FilmsSection = () => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "start start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["8%", "0%"]);
   const radius = useTransform(scrollYProgress, [0, 1], ["48px 48px 0 0", "0px"]);
+  const { items: films } = useCollection<Film>("wedding_films");
 
   return (
     <motion.section
@@ -102,19 +103,21 @@ const FilmsSection = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {films.map((f, i) => (
             <motion.article
-              key={f.title}
+              key={f.id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="group relative aspect-[3/4] overflow-hidden bg-background"
             >
-              <img
-                src={f.img}
-                alt={`${f.title} wedding film`}
-                className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
-                loading="lazy"
-              />
+              {f.image_url && (
+                <img
+                  src={f.image_url}
+                  alt={`${f.title} wedding film`}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
+                  loading="lazy"
+                />
+              )}
               <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-6">
                 <p className="eyebrow mb-2">{f.place} · {f.year}</p>

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 /**
  * Hero with scroll-driven title choreography:
@@ -13,6 +14,14 @@ import { motion, useScroll, useTransform } from "framer-motion";
 export const Hero = () => {
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { value } = useSiteContent("hero", {
+    title_lead: "MAD",
+    title_accent: "FEELMS",
+    eyebrow: "Cinematic Production · Australia",
+    top_eyebrow: "Showreel · 2026",
+    video_url: "https://cdn.coverr.co/videos/coverr-cinematic-wedding-walk-7396/1080p.mp4",
+    poster_url: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80",
+  });
 
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -53,21 +62,15 @@ export const Hero = () => {
         >
           <video
             ref={videoRef}
+            key={value.video_url}
             className="h-full w-full object-cover"
             autoPlay
             muted
             loop
             playsInline
-            poster="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80"
+            poster={value.poster_url}
           >
-            <source
-              src="https://cdn.coverr.co/videos/coverr-cinematic-wedding-walk-7396/1080p.mp4"
-              type="video/mp4"
-            />
-            <source
-              src="https://videos.pexels.com/video-files/3214448/3214448-uhd_2560_1440_25fps.mp4"
-              type="video/mp4"
-            />
+            <source src={value.video_url} type="video/mp4" />
           </video>
         </motion.div>
 
@@ -79,7 +82,7 @@ export const Hero = () => {
           style={{ opacity: eyebrowOpacity }}
           className="absolute left-1/2 top-24 -translate-x-1/2 eyebrow text-foreground/80 hidden md:block"
         >
-          Showreel · 2026
+          {value.top_eyebrow}
         </motion.div>
 
         {/* Centered title block — Y-driven by scroll, then flips up */}
@@ -100,7 +103,7 @@ export const Hero = () => {
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
               className="font-display text-[18vw] md:text-[12vw] leading-[0.9] tracking-tighter text-foreground"
             >
-              MAD <span className="italic text-primary">FEELMS</span>
+              {value.title_lead} <span className="italic text-primary">{value.title_accent}</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -108,7 +111,7 @@ export const Hero = () => {
               transition={{ delay: 1.3, duration: 1 }}
               className="eyebrow mt-4 md:mt-6 text-foreground/80"
             >
-              Cinematic Production · Australia
+              {value.eyebrow}
             </motion.p>
           </motion.div>
         </div>

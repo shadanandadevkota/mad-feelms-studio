@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Loader2, LogOut, Save, Trash2 } from "lucide-react";
+import { SectionManager, FieldDef } from "@/components/admin/SectionManager";
 
 type ContentRow = {
   id: string;
@@ -41,12 +42,150 @@ const SOCIAL_FIELDS: Array<{ k: string; label: string }> = [
   { k: "email", label: "Public email" },
 ];
 
-const PAGE_KEYS: Array<{ key: string; label: string }> = [
-  { key: "hero", label: "Home — Hero" },
-  { key: "page_wedding", label: "Wedding" },
-  { key: "page_ad_commercials", label: "Ad Commercials" },
-  { key: "page_fashion_editorial", label: "Fashion Editorial" },
-  { key: "page_media_production", label: "Media Production" },
+const PAGE_KEYS: Array<{ key: string; label: string; fields: Array<{ k: string; label: string; multiline?: boolean }> }> = [
+  {
+    key: "hero",
+    label: "Home — Hero",
+    fields: [
+      { k: "title_lead", label: "Title lead (e.g. MAD)" },
+      { k: "title_accent", label: "Title accent (italic, e.g. FEELMS)" },
+      { k: "eyebrow", label: "Tagline under title" },
+      { k: "top_eyebrow", label: "Top eyebrow (e.g. Showreel · 2026)" },
+      { k: "video_url", label: "Background video URL" },
+      { k: "poster_url", label: "Video poster image URL" },
+    ],
+  },
+  {
+    key: "page_wedding",
+    label: "Wedding",
+    fields: [
+      { k: "title_lead", label: "Title lead" },
+      { k: "title_accent", label: "Title accent (italic)" },
+      { k: "eyebrow", label: "Eyebrow" },
+      { k: "intro", label: "Intro paragraph", multiline: true },
+      { k: "side_image_url", label: "Side panel image URL" },
+      { k: "showreel_video_url", label: "Showreel video URL" },
+      { k: "philosophy", label: "Philosophy quote", multiline: true },
+    ],
+  },
+  {
+    key: "page_wedding_photos",
+    label: "Wedding Photos",
+    fields: [
+      { k: "title_lead", label: "Title lead" },
+      { k: "title_accent", label: "Title accent" },
+      { k: "eyebrow", label: "Eyebrow" },
+      { k: "intro", label: "Intro paragraph", multiline: true },
+      { k: "book_title", label: "Book section title" },
+      { k: "book_body", label: "Book section body", multiline: true },
+    ],
+  },
+  {
+    key: "page_ad_commercials",
+    label: "Ad Commercials",
+    fields: [
+      { k: "list_title_lead", label: "List section — title lead" },
+      { k: "list_title_accent", label: "List section — title accent" },
+      { k: "list_eyebrow", label: "List section — eyebrow" },
+    ],
+  },
+  {
+    key: "page_fashion_editorial",
+    label: "Fashion Editorial",
+    fields: [
+      { k: "title_lead", label: "Title lead" },
+      { k: "title_accent", label: "Title accent" },
+      { k: "eyebrow", label: "Eyebrow" },
+      { k: "intro", label: "Intro paragraph", multiline: true },
+    ],
+  },
+  {
+    key: "page_media_production",
+    label: "Media Production",
+    fields: [
+      { k: "title_line_1", label: "Title line 1" },
+      { k: "title_line_2", label: "Title line 2" },
+      { k: "title_accent", label: "Title accent (italic) — e.g. behave" },
+      { k: "title_tail", label: "Title tail — e.g. like art." },
+      { k: "intro", label: "Intro paragraph", multiline: true },
+      { k: "services_title_lead", label: "Services — title lead" },
+      { k: "services_title_accent", label: "Services — title accent" },
+      { k: "cta_title_lead", label: "CTA — title lead" },
+      { k: "cta_title_accent", label: "CTA — title accent" },
+      { k: "cta_button_label", label: "CTA — button label" },
+    ],
+  },
+  {
+    key: "page_contact",
+    label: "Home — Contact",
+    fields: [
+      { k: "title_lead", label: "Title lead" },
+      { k: "title_accent", label: "Title accent" },
+      { k: "eyebrow", label: "Eyebrow" },
+      { k: "intro", label: "Intro paragraph", multiline: true },
+    ],
+  },
+];
+
+// ===== Per-section field schemas for the SectionManager =====
+const WORK_FIELDS: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "category", label: "Category", type: "text", placeholder: "Wedding Film, Ad Commercial…" },
+  { key: "href", label: "Link", type: "text", placeholder: "/wedding" },
+  { key: "image_url", label: "Image", type: "image" },
+  { key: "video_url", label: "Hover video", type: "video" },
+  { key: "meta", label: "Meta (e.g. Byron Bay · 2025)", type: "text" },
+];
+
+const WEDDING_FILMS_FIELDS: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "place", label: "Place", type: "text" },
+  { key: "year", label: "Year", type: "text" },
+  { key: "image_url", label: "Image", type: "image" },
+];
+
+const WEDDING_PHOTOS_FIELDS: FieldDef[] = [
+  { key: "image_url", label: "Image", type: "image" },
+  { key: "col_span", label: "Column span", type: "text", placeholder: "md:col-span-6" },
+  { key: "aspect", label: "Aspect ratio class", type: "text", placeholder: "aspect-[4/5]" },
+  { key: "caption", label: "Caption (alt text)", type: "text" },
+];
+
+const AD_PROJECT_FIELDS: FieldDef[] = [
+  { key: "slug", label: "Slug (URL)", type: "text", placeholder: "maison-noir" },
+  { key: "title", label: "Title", type: "text" },
+  { key: "title_lead", label: "Title lead", type: "text" },
+  { key: "title_accent", label: "Title accent (italic)", type: "text" },
+  { key: "year", label: "Year", type: "text" },
+  { key: "eyebrow", label: "Eyebrow", type: "text" },
+  { key: "intro", label: "Intro", type: "textarea" },
+  { key: "hero_image_url", label: "Hero image", type: "image" },
+  { key: "hero_video_url", label: "Hero video", type: "video" },
+  { key: "credits", label: "Credits — array of {label, value}", type: "json" },
+  { key: "story_blocks", label: "Story blocks — array of {side, img, eyebrow, title, body}", type: "json" },
+];
+
+const EDITORIAL_FIELDS: FieldDef[] = [
+  { key: "slug", label: "Slug (URL)", type: "text" },
+  { key: "title", label: "Title", type: "text" },
+  { key: "publication", label: "Publication", type: "text" },
+  { key: "year", label: "Year", type: "text" },
+  { key: "cover_url", label: "Cover image", type: "image" },
+  { key: "intro", label: "Intro", type: "textarea" },
+  { key: "grid_pos", label: "Grid position class", type: "text", placeholder: "col-span-1 md:col-span-3 md:row-span-1" },
+  { key: "credits", label: "Credits — array of {label, value}", type: "json" },
+  { key: "gallery", label: "Gallery — array of image URLs", type: "json" },
+];
+
+const MEDIA_CASE_FIELDS: FieldDef[] = [
+  { key: "client", label: "Client", type: "text" },
+  { key: "title", label: "Title", type: "text" },
+  { key: "discipline", label: "Discipline", type: "text" },
+  { key: "image_url", label: "Image", type: "image" },
+];
+
+const MEDIA_SERVICE_FIELDS: FieldDef[] = [
+  { key: "name", label: "Name", type: "text" },
 ];
 
 const AdminDashboard = () => {
@@ -56,7 +195,6 @@ const AdminDashboard = () => {
   const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [busyKey, setBusyKey] = useState<string | null>(null);
 
-  // Gate
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) navigate("/maddyy/login", { replace: true });
   }, [loading, user, isAdmin, navigate]);
@@ -131,15 +269,151 @@ const AdminDashboard = () => {
       </header>
 
       <div className="container py-10">
-        <Tabs defaultValue="footer">
-          <TabsList className="mb-8">
+        <Tabs defaultValue="work">
+          <TabsList className="mb-8 flex-wrap h-auto">
+            <TabsTrigger value="work">Home Work</TabsTrigger>
+            <TabsTrigger value="wedding-films">Wedding Films</TabsTrigger>
+            <TabsTrigger value="wedding-photos">Wedding Photos</TabsTrigger>
+            <TabsTrigger value="ads">Ad Projects</TabsTrigger>
+            <TabsTrigger value="editorials">Editorials</TabsTrigger>
+            <TabsTrigger value="media-cases">Media Cases</TabsTrigger>
+            <TabsTrigger value="media-services">Services</TabsTrigger>
+            <TabsTrigger value="pages">Page Copy</TabsTrigger>
             <TabsTrigger value="footer">Footer</TabsTrigger>
             <TabsTrigger value="socials">Socials</TabsTrigger>
-            <TabsTrigger value="pages">Pages</TabsTrigger>
             <TabsTrigger value="contacts">Submissions ({contacts.length})</TabsTrigger>
           </TabsList>
 
-          {/* Footer tab */}
+          <TabsContent value="work">
+            <SectionManager
+              table="work_items"
+              title="Home — Selected Work tiles"
+              fields={WORK_FIELDS}
+              defaults={{ title: "New work", category: "Project", href: "/", image_url: "", video_url: "", meta: "" }}
+              renderLabel={(it) => `${it.title} — ${it.category}`}
+            />
+          </TabsContent>
+
+          <TabsContent value="wedding-films">
+            <SectionManager
+              table="wedding_films"
+              title="Wedding Photos — Films grid"
+              fields={WEDDING_FILMS_FIELDS}
+              defaults={{ title: "New film", place: "", year: "", image_url: "" }}
+              renderLabel={(it) => `${it.title} · ${it.place ?? ""}`}
+            />
+          </TabsContent>
+
+          <TabsContent value="wedding-photos">
+            <SectionManager
+              table="wedding_photos"
+              title="Wedding Photos — Photo grid"
+              fields={WEDDING_PHOTOS_FIELDS}
+              defaults={{ image_url: "", col_span: "md:col-span-6", aspect: "aspect-[4/5]", caption: "" }}
+              renderLabel={(it) => it.caption || it.image_url?.split("/").pop() || "Photo"}
+            />
+          </TabsContent>
+
+          <TabsContent value="ads">
+            <SectionManager
+              table="ad_projects"
+              title="Ad Commercials"
+              fields={AD_PROJECT_FIELDS}
+              defaults={{
+                slug: `project-${Date.now().toString(36).slice(-5)}`,
+                title: "New project",
+                title_lead: "New",
+                title_accent: "Project",
+                year: new Date().getFullYear().toString(),
+                hero_image_url: "",
+                hero_video_url: "",
+                eyebrow: "",
+                intro: "",
+                credits: [],
+                story_blocks: [],
+                is_featured: false,
+              }}
+              renderLabel={(it) => `${it.title}${it.is_featured ? " · ★" : ""}`}
+            />
+          </TabsContent>
+
+          <TabsContent value="editorials">
+            <SectionManager
+              table="editorial_projects"
+              title="Fashion Editorials"
+              fields={EDITORIAL_FIELDS}
+              defaults={{
+                slug: `editorial-${Date.now().toString(36).slice(-5)}`,
+                title: "New editorial",
+                publication: "",
+                year: new Date().getFullYear().toString(),
+                cover_url: "",
+                intro: "",
+                grid_pos: "col-span-1 md:col-span-3 md:row-span-1",
+                credits: [],
+                gallery: [],
+              }}
+              renderLabel={(it) => `${it.title} · ${it.publication ?? ""}`}
+            />
+          </TabsContent>
+
+          <TabsContent value="media-cases">
+            <SectionManager
+              table="media_cases"
+              title="Media Production — Case studies"
+              fields={MEDIA_CASE_FIELDS}
+              defaults={{ client: "New client", title: "Case title", discipline: "", image_url: "" }}
+              renderLabel={(it) => `${it.client} — ${it.title}`}
+            />
+          </TabsContent>
+
+          <TabsContent value="media-services">
+            <SectionManager
+              table="media_services"
+              title="Media Production — Services list"
+              fields={MEDIA_SERVICE_FIELDS}
+              defaults={{ name: "New service" }}
+              renderLabel={(it) => it.name}
+            />
+          </TabsContent>
+
+          <TabsContent value="pages">
+            <div className="grid gap-6">
+              {PAGE_KEYS.map(({ key, label, fields }) => (
+                <Card key={key} className="p-6 space-y-4 bg-surface border-border">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-display text-xl">{label}</h3>
+                    <Button
+                      size="sm"
+                      onClick={() => save(key)}
+                      disabled={busyKey === key}
+                      className="bg-primary text-primary-foreground hover:bg-primary/90"
+                    >
+                      {busyKey === key ? <Loader2 className="h-4 w-4 animate-spin" /> : (<><Save className="h-4 w-4 mr-2" /> Save</>)}
+                    </Button>
+                  </div>
+                  {fields.map((f) => (
+                    <div key={f.k} className="space-y-2">
+                      <Label className="eyebrow">{f.label}</Label>
+                      {f.multiline ? (
+                        <Textarea
+                          rows={3}
+                          value={rows[key]?.value?.[f.k] ?? ""}
+                          onChange={(e) => updateField(key, f.k, e.target.value)}
+                        />
+                      ) : (
+                        <Input
+                          value={rows[key]?.value?.[f.k] ?? ""}
+                          onChange={(e) => updateField(key, f.k, e.target.value)}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
           <TabsContent value="footer">
             <Card className="p-6 space-y-5 bg-surface border-border">
               {FOOTER_FIELDS.map((f) => (
@@ -160,12 +434,11 @@ const AdminDashboard = () => {
                 </div>
               ))}
               <Button onClick={() => save("footer")} disabled={busyKey === "footer"} className="bg-primary text-primary-foreground hover:bg-primary/90">
-                {busyKey === "footer" ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Save className="h-4 w-4 mr-2" /> Save footer</>}
+                {busyKey === "footer" ? <Loader2 className="h-4 w-4 animate-spin" /> : (<><Save className="h-4 w-4 mr-2" /> Save footer</>)}
               </Button>
             </Card>
           </TabsContent>
 
-          {/* Socials tab */}
           <TabsContent value="socials">
             <Card className="p-6 space-y-5 bg-surface border-border">
               {SOCIAL_FIELDS.map((f) => (
@@ -179,56 +452,11 @@ const AdminDashboard = () => {
                 </div>
               ))}
               <Button onClick={() => save("socials")} disabled={busyKey === "socials"} className="bg-primary text-primary-foreground hover:bg-primary/90">
-                {busyKey === "socials" ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Save className="h-4 w-4 mr-2" /> Save socials</>}
+                {busyKey === "socials" ? <Loader2 className="h-4 w-4 animate-spin" /> : (<><Save className="h-4 w-4 mr-2" /> Save socials</>)}
               </Button>
             </Card>
           </TabsContent>
 
-          {/* Pages tab */}
-          <TabsContent value="pages">
-            <div className="grid gap-6">
-              {PAGE_KEYS.map(({ key, label }) => {
-                const row = rows[key];
-                const fields = key === "hero"
-                  ? ["title_lead", "title_accent", "eyebrow", "top_eyebrow"]
-                  : ["title", "intro"];
-                return (
-                  <Card key={key} className="p-6 space-y-4 bg-surface border-border">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-display text-xl">{label}</h3>
-                      <Button
-                        size="sm"
-                        onClick={() => save(key)}
-                        disabled={busyKey === key}
-                        className="bg-primary text-primary-foreground hover:bg-primary/90"
-                      >
-                        {busyKey === key ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Save className="h-4 w-4 mr-2" /> Save</>}
-                      </Button>
-                    </div>
-                    {fields.map((f) => (
-                      <div key={f} className="space-y-2">
-                        <Label className="eyebrow">{f.replace(/_/g, " ")}</Label>
-                        {f === "intro" ? (
-                          <Textarea
-                            rows={3}
-                            value={row?.value?.[f] ?? ""}
-                            onChange={(e) => updateField(key, f, e.target.value)}
-                          />
-                        ) : (
-                          <Input
-                            value={row?.value?.[f] ?? ""}
-                            onChange={(e) => updateField(key, f, e.target.value)}
-                          />
-                        )}
-                      </div>
-                    ))}
-                  </Card>
-                );
-              })}
-            </div>
-          </TabsContent>
-
-          {/* Contacts tab */}
           <TabsContent value="contacts">
             <div className="grid gap-4">
               {contacts.length === 0 && (

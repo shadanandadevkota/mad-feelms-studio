@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_projects: {
+        Row: {
+          created_at: string
+          credits: Json
+          eyebrow: string | null
+          hero_image_url: string | null
+          hero_video_url: string | null
+          id: string
+          intro: string | null
+          is_featured: boolean
+          is_visible: boolean
+          slug: string
+          sort_order: number
+          story_blocks: Json
+          title: string
+          title_accent: string | null
+          title_lead: string | null
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          created_at?: string
+          credits?: Json
+          eyebrow?: string | null
+          hero_image_url?: string | null
+          hero_video_url?: string | null
+          id?: string
+          intro?: string | null
+          is_featured?: boolean
+          is_visible?: boolean
+          slug: string
+          sort_order?: number
+          story_blocks?: Json
+          title: string
+          title_accent?: string | null
+          title_lead?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          created_at?: string
+          credits?: Json
+          eyebrow?: string | null
+          hero_image_url?: string | null
+          hero_video_url?: string | null
+          id?: string
+          intro?: string | null
+          is_featured?: boolean
+          is_visible?: boolean
+          slug?: string
+          sort_order?: number
+          story_blocks?: Json
+          title?: string
+          title_accent?: string | null
+          title_lead?: string | null
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
@@ -38,6 +98,120 @@ export type Database = {
           message?: string
           name?: string
           project_type?: string | null
+        }
+        Relationships: []
+      }
+      editorial_projects: {
+        Row: {
+          cover_url: string | null
+          created_at: string
+          credits: Json
+          gallery: Json
+          grid_pos: string
+          id: string
+          intro: string | null
+          is_visible: boolean
+          publication: string | null
+          slug: string
+          sort_order: number
+          title: string
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          cover_url?: string | null
+          created_at?: string
+          credits?: Json
+          gallery?: Json
+          grid_pos?: string
+          id?: string
+          intro?: string | null
+          is_visible?: boolean
+          publication?: string | null
+          slug: string
+          sort_order?: number
+          title: string
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          cover_url?: string | null
+          created_at?: string
+          credits?: Json
+          gallery?: Json
+          grid_pos?: string
+          id?: string
+          intro?: string | null
+          is_visible?: boolean
+          publication?: string | null
+          slug?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      media_cases: {
+        Row: {
+          client: string
+          created_at: string
+          discipline: string | null
+          id: string
+          image_url: string | null
+          is_visible: boolean
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          client: string
+          created_at?: string
+          discipline?: string | null
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          client?: string
+          created_at?: string
+          discipline?: string | null
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      media_services: {
+        Row: {
+          created_at: string
+          id: string
+          is_visible: boolean
+          name: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          name: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_visible?: boolean
+          name?: string
+          sort_order?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -86,6 +260,120 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      wedding_films: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string | null
+          is_visible: boolean
+          place: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          year: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          place?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+          year?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          place?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          year?: string | null
+        }
+        Relationships: []
+      }
+      wedding_photos: {
+        Row: {
+          aspect: string
+          caption: string | null
+          col_span: string
+          created_at: string
+          id: string
+          image_url: string
+          is_visible: boolean
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          aspect?: string
+          caption?: string | null
+          col_span?: string
+          created_at?: string
+          id?: string
+          image_url: string
+          is_visible?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          aspect?: string
+          caption?: string | null
+          col_span?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_visible?: boolean
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      work_items: {
+        Row: {
+          category: string
+          created_at: string
+          href: string
+          id: string
+          image_url: string | null
+          is_visible: boolean
+          meta: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          href: string
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          meta?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          href?: string
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          meta?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+          video_url?: string | null
         }
         Relationships: []
       }
