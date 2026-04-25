@@ -14,6 +14,14 @@ import { useSiteContent } from "@/hooks/useSiteContent";
 export const Hero = () => {
   const ref = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { value } = useSiteContent("hero", {
+    title_lead: "MAD",
+    title_accent: "FEELMS",
+    eyebrow: "Cinematic Production · Australia",
+    top_eyebrow: "Showreel · 2026",
+    video_url: "https://cdn.coverr.co/videos/coverr-cinematic-wedding-walk-7396/1080p.mp4",
+    poster_url: "https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?w=1920&q=80",
+  });
 
   const { scrollYProgress } = useScroll({
     target: ref,
