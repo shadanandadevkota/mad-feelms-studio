@@ -103,7 +103,7 @@ export const Hero = () => {
               transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
               className="font-display text-[18vw] md:text-[12vw] leading-[0.9] tracking-tighter text-foreground"
             >
-              MAD <span className="italic text-primary">FEELMS</span>
+              {value.title_lead} <span className="italic text-primary">{value.title_accent}</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0 }}
@@ -111,7 +111,7 @@ export const Hero = () => {
               transition={{ delay: 1.3, duration: 1 }}
               className="eyebrow mt-4 md:mt-6 text-foreground/80"
             >
-              Cinematic Production · Australia
+              {value.eyebrow}
             </motion.p>
           </motion.div>
         </div>
