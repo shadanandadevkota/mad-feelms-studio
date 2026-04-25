@@ -19,48 +19,59 @@ const WeddingPhotos = () => {
   );
 };
 
-const Header = () => (
-  <section className="pt-32 md:pt-40 pb-12 px-6 md:px-10">
-    <div className="max-w-7xl mx-auto">
-      <Link to="/wedding" className="eyebrow text-muted-foreground hover:text-primary transition-colors">← Back</Link>
-      <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-        <div>
-          <p className="eyebrow mb-4">Photographs · Selected</p>
-          <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9] text-balance">
-            Wedding by <span className="italic text-primary">Maddyyy</span>
-          </h1>
+const Header = () => {
+  const { value } = useSiteContent("page_wedding_photos", {
+    title_lead: "Wedding by",
+    title_accent: "Maddyyy",
+    eyebrow: "Photographs · Selected",
+    intro: "A quiet edit — chosen frames from a season of weddings, told as they happened.",
+    book_title: "Book your wedding date",
+    book_body: "Limited dates each season. Send us your date, location and a few words about the two of you.",
+  });
+  return (
+    <section className="pt-32 md:pt-40 pb-12 px-6 md:px-10">
+      <div className="max-w-7xl mx-auto">
+        <Link to="/wedding" className="eyebrow text-muted-foreground hover:text-primary transition-colors">← Back</Link>
+        <div className="mt-6 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
+            <p className="eyebrow mb-4">{value.eyebrow}</p>
+            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9] text-balance">
+              {value.title_lead} <span className="italic text-primary">{value.title_accent}</span>
+            </h1>
+          </div>
+          <p className="text-muted-foreground max-w-sm text-sm">{value.intro}</p>
         </div>
-        <p className="text-muted-foreground max-w-sm text-sm">
-          A quiet edit — chosen frames from a season of weddings, told as they happened.
-        </p>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
-const PhotosSection = () => (
-  <section className="px-6 md:px-10 pb-32">
-    <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
-      {photos.map((p, i) => (
-        <motion.figure
-          key={i}
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.9, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative overflow-hidden bg-surface ${p.w} ${p.aspect}`}
-        >
-          <img
-            src={p.src}
-            alt={`Wedding photo ${i + 1}`}
-            className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] hover:scale-105"
-            loading="lazy"
-          />
-        </motion.figure>
-      ))}
-    </div>
-  </section>
-);
+const PhotosSection = () => {
+  const { items: photos } = useCollection<Photo>("wedding_photos");
+  return (
+    <section className="px-6 md:px-10 pb-32">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
+        {photos.map((p, i) => (
+          <motion.figure
+            key={p.id}
+            initial={{ opacity: 0, y: 60 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.9, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+            className={`relative overflow-hidden bg-surface ${p.col_span} ${p.aspect}`}
+          >
+            <img
+              src={p.image_url}
+              alt={p.caption ?? `Wedding photo ${i + 1}`}
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] hover:scale-105"
+              loading="lazy"
+            />
+          </motion.figure>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 /** Films section — overlaps the previous via sticky-like spacing */
 const FilmsSection = () => {
