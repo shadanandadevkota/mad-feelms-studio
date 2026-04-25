@@ -2,6 +2,7 @@ import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const Wedding = () => {
   return (
