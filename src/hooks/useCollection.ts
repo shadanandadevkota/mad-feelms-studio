@@ -34,8 +34,9 @@ export function useCollection<T extends { id: string; sort_order: number; is_vis
 
   useEffect(() => {
     load();
+    const channelName = `cms:${table}:${Math.random().toString(36).slice(2)}`;
     const channel = supabase
-      .channel(`cms:${table}`)
+      .channel(channelName)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table },
