@@ -2,52 +2,49 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
+import { useCollection } from "@/hooks/useCollection";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 type Editorial = {
+  id: string;
   slug: string;
   title: string;
-  publication: string;
-  year: string;
-  img: string;
-  pos: string;
-  aspect: string;
+  publication: string | null;
+  year: string | null;
+  cover_url: string | null;
+  grid_pos: string;
+  is_visible: boolean;
+  sort_order: number;
 };
 
-const editorials: Editorial[] = [
-  { slug: "sun-and-linen", title: "Sun & Linen", publication: "Vogue AU", year: "2025", img: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=80", pos: "col-span-1 row-span-2 md:col-span-3 md:row-span-2", aspect: "" },
-  { slug: "salt-pages", title: "Salt Pages", publication: "Russh", year: "2025", img: "https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=1400&q=80", pos: "col-span-1 row-span-1 md:col-span-3 md:row-span-1", aspect: "" },
-  { slug: "wild-silk", title: "Wild Silk", publication: "Harper's Bazaar", year: "2024", img: "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=1400&q=80", pos: "col-span-2 row-span-2 md:col-span-6 md:row-span-2", aspect: "" },
-  { slug: "atelier-light", title: "Atelier Light", publication: "Oyster", year: "2024", img: "https://images.unsplash.com/photo-1485231183945-fffde7cc051e?w=1400&q=80", pos: "col-span-1 row-span-1 md:col-span-3 md:row-span-1", aspect: "" },
-  { slug: "noir-bloom", title: "Noir Bloom", publication: "Self Service", year: "2024", img: "https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?w=1400&q=80", pos: "col-span-1 row-span-2 md:col-span-3 md:row-span-2", aspect: "" },
-];
-
 const FashionEditorial = () => {
+  const { items } = useCollection<Editorial>("editorial_projects");
+  const { value: copy } = useSiteContent("page_fashion_editorial", {
+    eyebrow: "Fashion · Editorial",
+    title_lead: "The",
+    title_accent: "edit",
+    intro: "Five recent editorials shot for publications across AU, EU and Asia.",
+  });
+
   return (
     <PageShell>
       <section className="pt-32 md:pt-40 pb-12 px-6 md:px-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
-            <p className="eyebrow mb-4">Fashion · Editorial</p>
+            <p className="eyebrow mb-4">{copy.eyebrow}</p>
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl text-foreground leading-[0.9] text-balance">
-              The <span className="italic text-primary">edit</span>
+              {copy.title_lead} <span className="italic text-primary">{copy.title_accent}</span>
             </h1>
           </div>
-          <p className="text-muted-foreground max-w-sm text-sm">
-            Five recent editorials shot for publications across AU, EU and Asia.
-          </p>
+          <p className="text-muted-foreground max-w-sm text-sm">{copy.intro}</p>
         </div>
       </section>
 
       <section className="px-4 sm:px-6 md:px-10 pb-24 md:pb-32">
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-12 auto-rows-[180px] sm:auto-rows-[220px] md:auto-rows-[260px] gap-3 sm:gap-4 md:gap-5">
-          {/* Left two */}
-          <Tile e={editorials[0]} />
-          <Tile e={editorials[1]} />
-          {/* Center */}
-          <Tile e={editorials[2]} />
-          {/* Right two */}
-          <Tile e={editorials[3]} />
-          <Tile e={editorials[4]} />
+          {items.map((e) => (
+            <Tile key={e.id} e={e} />
+          ))}
         </div>
       </section>
     </PageShell>
@@ -64,18 +61,19 @@ const Tile = ({ e }: { e: Editorial }) => {
       transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      className={`group relative overflow-hidden bg-surface ${e.pos} ${e.aspect}`}
+      className={`group relative overflow-hidden bg-surface ${e.grid_pos}`}
     >
       <Link to={`/fashion-editorial/${e.slug}`} className="absolute inset-0 z-10 md:hidden" aria-label={e.title} />
 
-      <img
-        src={e.img}
-        alt={`${e.title} — ${e.publication}`}
-        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
-        loading="lazy"
-      />
+      {e.cover_url && (
+        <img
+          src={e.cover_url}
+          alt={`${e.title}${e.publication ? ` — ${e.publication}` : ""}`}
+          className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
+          loading="lazy"
+        />
+      )}
 
-      {/* Mobile: always-visible gradient. Desktop: hover-only */}
       <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/30 to-transparent md:hidden" />
       <motion.div
         animate={{ opacity: hover ? 1 : 0 }}
@@ -83,22 +81,32 @@ const Tile = ({ e }: { e: Editorial }) => {
         className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent hidden md:block"
       />
 
-      {/* Mobile caption — always visible, compact */}
       <figcaption className="absolute inset-x-0 bottom-0 p-3 sm:p-4 md:hidden">
-        <p className="eyebrow mb-1 text-[10px]">{e.publication} · {e.year}</p>
+        {(e.publication || e.year) && (
+          <p className="eyebrow mb-1 text-[10px]">
+            {e.publication}
+            {e.publication && e.year ? " · " : ""}
+            {e.year}
+          </p>
+        )}
         <h3 className="font-display text-base sm:text-lg text-foreground leading-tight mb-2">{e.title}</h3>
         <span className="inline-flex items-center px-2.5 py-1 border border-foreground/40 bg-background/40 backdrop-blur-sm eyebrow text-[10px] text-foreground">
           View More →
         </span>
       </figcaption>
 
-      {/* Desktop caption — hover reveal */}
       <motion.figcaption
         animate={{ opacity: hover ? 1 : 0, y: hover ? 0 : 20 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className="absolute inset-x-0 bottom-0 p-6 md:p-8 hidden md:block"
       >
-        <p className="eyebrow mb-2">{e.publication} · {e.year}</p>
+        {(e.publication || e.year) && (
+          <p className="eyebrow mb-2">
+            {e.publication}
+            {e.publication && e.year ? " · " : ""}
+            {e.year}
+          </p>
+        )}
         <h3 className="font-display text-2xl md:text-4xl text-foreground leading-tight">{e.title}</h3>
         <Link
           to={`/fashion-editorial/${e.slug}`}
