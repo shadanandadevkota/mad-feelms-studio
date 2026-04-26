@@ -34,8 +34,11 @@ export function useSiteContent<T extends Record<string, any>>(
 
   useEffect(() => {
     load();
+    // Unique channel per hook instance to avoid "cannot add callbacks after subscribe()"
+    // when multiple components subscribe to the same key.
+    const channelName = `site_content:${key}:${Math.random().toString(36).slice(2)}`;
     const channel = supabase
-      .channel(`site_content:${key}`)
+      .channel(channelName)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "site_content", filter: `key=eq.${key}` },
