@@ -9,8 +9,25 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
-import { Loader2, LogOut, Save, Trash2 } from "lucide-react";
+import {
+  Loader2, LogOut, Save, Trash2,
+  Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox,
+} from "lucide-react";
 import { SectionManager, FieldDef } from "@/components/admin/SectionManager";
+
+const NAV_SECTIONS: Array<{ value: string; label: string; icon: React.ComponentType<{ className?: string }>; group: string }> = [
+  { value: "work", label: "Home Work", icon: Home, group: "Collections" },
+  { value: "wedding-films", label: "Wedding Films", icon: Film, group: "Collections" },
+  { value: "wedding-photos", label: "Wedding Photos", icon: Camera, group: "Collections" },
+  { value: "ads", label: "Ad Projects", icon: Megaphone, group: "Collections" },
+  { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections" },
+  { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections" },
+  { value: "media-services", label: "Services", icon: Wrench, group: "Collections" },
+  { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings" },
+  { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings" },
+  { value: "socials", label: "Socials", icon: Share2, group: "Site Settings" },
+  { value: "contacts", label: "Inbox", icon: Inbox, group: "Site Settings" },
+];
 
 type ContentRow = {
   id: string;
