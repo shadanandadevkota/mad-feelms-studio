@@ -527,8 +527,9 @@ const AdminDashboard = () => {
               ))}
             </div>
           </TabsContent>
-        </Tabs>
-      </div>
+          </div>
+        </div>
+      </Tabs>
     </main>
   );
 };
