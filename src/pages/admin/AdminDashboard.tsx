@@ -253,36 +253,49 @@ const AdminDashboard = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <header className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b border-border">
+      {/* Decorative top gradient */}
+      <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
+
+      <header className="relative sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border/60">
         <div className="container flex items-center justify-between py-5">
-          <div>
-            <p className="eyebrow text-muted-foreground">Mad Feelms</p>
-            <h1 className="font-display text-2xl">Admin Dashboard</h1>
+          <div className="flex items-center gap-4">
+            <div className="h-10 w-10 rounded-sm bg-primary flex items-center justify-center shadow-[0_0_30px_-5px_hsl(var(--primary)/0.6)]">
+              <span className="font-display text-primary-foreground text-lg leading-none">M</span>
+            </div>
+            <div>
+              <p className="eyebrow text-primary">Mad Feelms · Studio CMS</p>
+              <h1 className="font-display text-2xl md:text-3xl tracking-tight">Admin Dashboard</h1>
+            </div>
           </div>
           <div className="flex items-center gap-3">
-            <span className="hidden md:inline text-sm text-muted-foreground">{user.email}</span>
-            <Button variant="outline" size="sm" onClick={() => signOut()}>
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border">
+              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="text-xs text-muted-foreground">{user.email}</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={() => signOut()} className="border-border hover:bg-surface">
               <LogOut className="h-4 w-4 mr-2" /> Sign out
             </Button>
           </div>
         </div>
       </header>
 
-      <div className="container py-10">
-        <Tabs defaultValue="work">
-          <TabsList className="mb-8 flex-wrap h-auto">
-            <TabsTrigger value="work">Home Work</TabsTrigger>
-            <TabsTrigger value="wedding-films">Wedding Films</TabsTrigger>
-            <TabsTrigger value="wedding-photos">Wedding Photos</TabsTrigger>
-            <TabsTrigger value="ads">Ad Projects</TabsTrigger>
-            <TabsTrigger value="editorials">Editorials</TabsTrigger>
-            <TabsTrigger value="media-cases">Media Cases</TabsTrigger>
-            <TabsTrigger value="media-services">Services</TabsTrigger>
-            <TabsTrigger value="pages">Page Copy</TabsTrigger>
-            <TabsTrigger value="footer">Footer</TabsTrigger>
-            <TabsTrigger value="socials">Socials</TabsTrigger>
-            <TabsTrigger value="contacts">Submissions ({contacts.length})</TabsTrigger>
-          </TabsList>
+      <div className="container py-10 relative">
+        <Tabs defaultValue="work" className="space-y-8">
+          <div className="overflow-x-auto -mx-2 px-2">
+            <TabsList className="inline-flex h-auto p-1.5 bg-surface border border-border rounded-lg gap-1">
+              <TabsTrigger value="work" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Home Work</TabsTrigger>
+              <TabsTrigger value="wedding-films" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Wedding Films</TabsTrigger>
+              <TabsTrigger value="wedding-photos" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Wedding Photos</TabsTrigger>
+              <TabsTrigger value="ads" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Ad Projects</TabsTrigger>
+              <TabsTrigger value="editorials" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Editorials</TabsTrigger>
+              <TabsTrigger value="media-cases" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Media Cases</TabsTrigger>
+              <TabsTrigger value="media-services" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Services</TabsTrigger>
+              <TabsTrigger value="pages" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Page Copy</TabsTrigger>
+              <TabsTrigger value="footer" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Footer</TabsTrigger>
+              <TabsTrigger value="socials" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Socials</TabsTrigger>
+              <TabsTrigger value="contacts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Inbox <span className="ml-1.5 px-1.5 py-0.5 bg-primary/20 text-primary rounded text-[10px]">{contacts.length}</span></TabsTrigger>
+            </TabsList>
+          </div>
 
           <TabsContent value="work">
             <SectionManager
