@@ -4,6 +4,7 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Name is required").max(100),
@@ -15,6 +16,12 @@ const schema = z.object({
 export const Contact = () => {
   const [submitting, setSubmitting] = useState(false);
   const [done, setDone] = useState(false);
+  const { value: copy } = useSiteContent("page_contact", {
+    eyebrow: "Let's create",
+    title_lead: "Tell us your",
+    title_accent: "story.",
+    intro: "Weddings, commercials, editorial, brand films — if it has a heartbeat, we'd love to hear about it.",
+  });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,14 +69,11 @@ export const Contact = () => {
           className="grid grid-cols-1 lg:grid-cols-12 gap-12 md:gap-20"
         >
           <div className="lg:col-span-5">
-            <p className="eyebrow mb-6">Let's create</p>
+            <p className="eyebrow mb-6">{copy.eyebrow}</p>
             <h2 className="font-display text-5xl md:text-6xl lg:text-7xl leading-[0.95] text-foreground text-balance">
-              Tell us your <span className="italic text-primary">story.</span>
+              {copy.title_lead} <span className="italic text-primary">{copy.title_accent}</span>
             </h2>
-            <p className="text-muted-foreground mt-6 max-w-md">
-              Weddings, commercials, editorial, brand films — if it has a heartbeat,
-              we'd love to hear about it.
-            </p>
+            <p className="text-muted-foreground mt-6 max-w-md">{copy.intro}</p>
             <div className="mt-10 space-y-3 text-sm">
               <div>
                 <div className="eyebrow mb-1">Email</div>
