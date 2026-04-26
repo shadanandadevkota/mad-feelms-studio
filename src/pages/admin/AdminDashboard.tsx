@@ -268,51 +268,66 @@ const AdminDashboard = () => {
   }
   if (!user || !isAdmin) return null;
 
+  const groups = Array.from(new Set(NAV_SECTIONS.map((s) => s.group)));
+
   return (
     <main className="min-h-screen bg-background text-foreground">
-      {/* Decorative top gradient */}
-      <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
-
-      <header className="relative sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border/60">
-        <div className="container flex items-center justify-between py-5">
-          <div className="flex items-center gap-4">
+      <Tabs defaultValue="work" orientation="vertical" className="flex min-h-screen w-full">
+        {/* === Left sidebar === */}
+        <aside className="sticky top-0 h-screen w-64 shrink-0 border-r border-border/60 bg-surface/40 backdrop-blur-xl flex flex-col">
+          <div className="px-5 py-5 border-b border-border/60 flex items-center gap-3">
             <div className="h-10 w-10 rounded-sm bg-primary flex items-center justify-center shadow-[0_0_30px_-5px_hsl(var(--primary)/0.6)]">
               <span className="font-display text-primary-foreground text-lg leading-none">M</span>
             </div>
-            <div>
-              <p className="eyebrow text-primary">Mad Feelms · Studio CMS</p>
-              <h1 className="font-display text-2xl md:text-3xl tracking-tight">Admin Dashboard</h1>
+            <div className="min-w-0">
+              <p className="eyebrow text-primary truncate">Studio CMS</p>
+              <h1 className="font-display text-base tracking-tight truncate">Mad Feelms</h1>
             </div>
           </div>
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface border border-border">
-              <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-              <span className="text-xs text-muted-foreground">{user.email}</span>
+
+          <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-6">
+            {groups.map((g) => (
+              <div key={g} className="space-y-1">
+                <p className="eyebrow text-[10px] px-3 mb-2 text-muted-foreground/70">{g}</p>
+                <TabsList className="flex flex-col h-auto bg-transparent p-0 gap-1 w-full">
+                  {NAV_SECTIONS.filter((s) => s.group === g).map((s) => {
+                    const Icon = s.icon;
+                    return (
+                      <TabsTrigger
+                        key={s.value}
+                        value={s.value}
+                        className="w-full justify-start gap-3 px-3 py-2.5 rounded-md text-sm font-body normal-case tracking-normal text-muted-foreground hover:text-foreground hover:bg-surface data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-[0_0_24px_-8px_hsl(var(--primary)/0.7)] transition-all"
+                      >
+                        <Icon className="h-4 w-4 shrink-0" />
+                        <span className="flex-1 text-left">{s.label}</span>
+                        {s.value === "contacts" && contacts.length > 0 && (
+                          <span className="px-1.5 py-0.5 bg-primary/20 text-primary rounded text-[10px]">
+                            {contacts.length}
+                          </span>
+                        )}
+                      </TabsTrigger>
+                    );
+                  })}
+                </TabsList>
+              </div>
+            ))}
+          </nav>
+
+          <div className="px-3 py-4 border-t border-border/60 space-y-2">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-surface border border-border">
+              <span className="h-2 w-2 rounded-full bg-primary animate-pulse shrink-0" />
+              <span className="text-xs text-muted-foreground truncate">{user.email}</span>
             </div>
-            <Button variant="outline" size="sm" onClick={() => signOut()} className="border-border hover:bg-surface">
+            <Button variant="outline" size="sm" onClick={() => signOut()} className="w-full border-border hover:bg-surface justify-start">
               <LogOut className="h-4 w-4 mr-2" /> Sign out
             </Button>
           </div>
-        </div>
-      </header>
+        </aside>
 
-      <div className="container py-10 relative">
-        <Tabs defaultValue="work" className="space-y-8">
-          <div className="overflow-x-auto -mx-2 px-2">
-            <TabsList className="inline-flex h-auto p-1.5 bg-surface border border-border rounded-lg gap-1">
-              <TabsTrigger value="work" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Home Work</TabsTrigger>
-              <TabsTrigger value="wedding-films" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Wedding Films</TabsTrigger>
-              <TabsTrigger value="wedding-photos" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Wedding Photos</TabsTrigger>
-              <TabsTrigger value="ads" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Ad Projects</TabsTrigger>
-              <TabsTrigger value="editorials" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Editorials</TabsTrigger>
-              <TabsTrigger value="media-cases" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Media Cases</TabsTrigger>
-              <TabsTrigger value="media-services" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Services</TabsTrigger>
-              <TabsTrigger value="pages" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Page Copy</TabsTrigger>
-              <TabsTrigger value="footer" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Footer</TabsTrigger>
-              <TabsTrigger value="socials" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Socials</TabsTrigger>
-              <TabsTrigger value="contacts" className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground rounded-md px-4 py-2 text-xs uppercase tracking-wider font-display transition-all">Inbox <span className="ml-1.5 px-1.5 py-0.5 bg-primary/20 text-primary rounded text-[10px]">{contacts.length}</span></TabsTrigger>
-            </TabsList>
-          </div>
+        {/* === Main content === */}
+        <div className="flex-1 min-w-0 relative">
+          <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
+          <div className="relative px-6 md:px-10 py-10 space-y-8">
 
           <TabsContent value="work">
             <SectionManager
