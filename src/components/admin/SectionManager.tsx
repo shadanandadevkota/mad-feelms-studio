@@ -180,25 +180,27 @@ export const SectionManager = ({ table, title, fields, defaults, renderLabel }: 
   }
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
+    <div className="space-y-5">
+      <div className="flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h2 className="font-display text-2xl">{title}</h2>
-          <p className="text-sm text-muted-foreground">
-            {items.length} item{items.length !== 1 && "s"} · drag to reorder
+          <p className="eyebrow text-primary mb-1">Collection</p>
+          <h2 className="font-display text-3xl tracking-tight">{title}</h2>
+          <p className="text-sm text-muted-foreground mt-1">
+            {items.length} item{items.length !== 1 && "s"} · drag the handle to reorder
           </p>
         </div>
-        <Button onClick={addItem} className="bg-primary text-primary-foreground hover:bg-primary/90">
-          <Plus className="h-4 w-4 mr-2" /> Add
+        <Button onClick={addItem} className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_30px_-8px_hsl(var(--primary)/0.5)]">
+          <Plus className="h-4 w-4 mr-2" /> Add new
         </Button>
       </div>
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={onDragEnd}>
         <SortableContext items={items.map((i) => i.id)} strategy={verticalListSortingStrategy}>
-          <div className="space-y-3">
-            {items.map((item) => (
+          <div className="space-y-2">
+            {items.map((item, idx) => (
               <SortableRow
                 key={item.id}
+                index={idx}
                 item={item}
                 fields={fields}
                 open={openId === item.id}
@@ -213,9 +215,11 @@ export const SectionManager = ({ table, title, fields, defaults, renderLabel }: 
               />
             ))}
             {items.length === 0 && (
-              <p className="text-sm text-muted-foreground py-8 text-center">
-                No items yet. Click <span className="font-display">Add</span> to create one.
-              </p>
+              <div className="border border-dashed border-border rounded-lg py-16 text-center">
+                <p className="text-sm text-muted-foreground">
+                  No items yet. Click <span className="font-display text-foreground">Add new</span> to create one.
+                </p>
+              </div>
             )}
           </div>
         </SortableContext>
@@ -225,6 +229,7 @@ export const SectionManager = ({ table, title, fields, defaults, renderLabel }: 
 };
 
 const SortableRow = ({
+  index,
   item,
   fields,
   open,
@@ -237,6 +242,7 @@ const SortableRow = ({
   onToggleVisible,
   renderLabel,
 }: {
+  index: number;
   item: Item;
   fields: FieldDef[];
   open: boolean;
@@ -259,42 +265,57 @@ const SortableRow = ({
     opacity: isDragging ? 0.6 : 1,
   };
 
+  const thumb = item.image_url || item.hero_image_url || item.cover_url || item.video_url || item.hero_video_url;
+  const isVideo = thumb && /\.(mp4|webm|mov)/i.test(thumb);
+
   return (
-    <Card ref={setNodeRef} style={style} className="bg-surface border-border">
+    <Card ref={setNodeRef} style={style} className={`bg-surface border-border transition-all ${open ? "border-primary/40 shadow-[0_0_40px_-15px_hsl(var(--primary)/0.4)]" : "hover:border-border/80"}`}>
       <div className="flex items-center gap-3 p-3">
         <button
           {...attributes}
           {...listeners}
-          className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1"
+          className="cursor-grab active:cursor-grabbing text-muted-foreground hover:text-foreground p-1.5 rounded hover:bg-background/60"
           aria-label="Drag to reorder"
         >
           <GripVertical className="h-4 w-4" />
         </button>
+        <span className="hidden md:inline text-xs text-muted-foreground font-mono w-6">{String(index + 1).padStart(2, "0")}</span>
+        {thumb ? (
+          isVideo ? (
+            <div className="h-10 w-10 rounded bg-background overflow-hidden border border-border flex-shrink-0 flex items-center justify-center">
+              <video src={thumb} className="h-full w-full object-cover" muted />
+            </div>
+          ) : (
+            <img src={thumb} alt="" className="h-10 w-10 rounded object-cover bg-background border border-border flex-shrink-0" />
+          )
+        ) : (
+          <div className="h-10 w-10 rounded bg-background border border-dashed border-border flex-shrink-0" />
+        )}
         <button
           className="flex-1 text-left flex items-center gap-2 min-w-0"
           onClick={onToggleOpen}
         >
           <span className="font-display truncate">{renderLabel(item) || "Untitled"}</span>
           {!item.is_visible && (
-            <span className="eyebrow text-muted-foreground">Hidden</span>
+            <span className="eyebrow text-muted-foreground border border-border px-1.5 py-0.5 rounded text-[10px]">Hidden</span>
           )}
         </button>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-0.5">
           <button
             onClick={() => onToggleVisible(!item.is_visible)}
-            className="p-2 text-muted-foreground hover:text-foreground"
+            className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition"
             aria-label={item.is_visible ? "Hide" : "Show"}
             title={item.is_visible ? "Hide" : "Show"}
           >
             {item.is_visible ? <Eye className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
           </button>
-          <button onClick={onDuplicate} className="p-2 text-muted-foreground hover:text-foreground" title="Duplicate">
+          <button onClick={onDuplicate} className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition" title="Duplicate">
             <Copy className="h-4 w-4" />
           </button>
-          <button onClick={onDelete} className="p-2 text-muted-foreground hover:text-destructive" title="Delete">
+          <button onClick={onDelete} className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition" title="Delete">
             <Trash2 className="h-4 w-4" />
           </button>
-          <button onClick={onToggleOpen} className="p-2 text-muted-foreground hover:text-foreground">
+          <button onClick={onToggleOpen} className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition">
             {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
           </button>
         </div>
