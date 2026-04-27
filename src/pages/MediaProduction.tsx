@@ -38,6 +38,9 @@ const MediaProduction = () => {
     cta_title_lead: "Have a film",
     cta_title_accent: "in mind?",
     cta_button_label: "Start a Project →",
+    hero_image_url: "https://images.unsplash.com/photo-1500021804447-2ca2eaaaabeb?w=1920&q=80",
+    hero_quote: "“The best films don't shout. They wait — until you can't look away.”",
+    hero_quote_author: "— Studio Maxim",
   });
 
   return (
@@ -55,10 +58,24 @@ const Manifesto = ({ copy }: { copy: any }) => {
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", "-15%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0.3]);
+  const imgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
 
   return (
     <section ref={ref} className="relative min-h-[110vh] w-full pt-32 md:pt-40 pb-20 px-6 md:px-10 overflow-hidden">
-      <motion.div style={{ y, opacity }} className="max-w-7xl mx-auto">
+      {/* Background hero photo */}
+      {copy.hero_image_url && (
+        <motion.div style={{ y: imgY }} className="absolute inset-0 -top-[10%] -bottom-[10%]">
+          <img
+            src={copy.hero_image_url}
+            alt="Media production set"
+            className="h-full w-full object-cover blur-in"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/80 via-background/60 to-background" />
+        </motion.div>
+      )}
+
+      <motion.div style={{ y, opacity }} className="relative max-w-7xl mx-auto">
         <p className="eyebrow mb-8">Media Production · Studio</p>
         <h1 className="font-display text-[14vw] md:text-[10vw] leading-[0.85] tracking-tighter text-foreground text-balance">
           {copy.title_line_1} <br />
@@ -66,9 +83,19 @@ const Manifesto = ({ copy }: { copy: any }) => {
           <span className="italic text-primary">{copy.title_accent}</span> {copy.title_tail}
         </h1>
 
-        <div className="mt-20 grid grid-cols-1 md:grid-cols-12 gap-8">
-          <div className="md:col-span-5 md:col-start-7">
-            <p className="text-muted-foreground text-lg md:text-xl leading-relaxed">{copy.intro}</p>
+        <div className="mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
+          <div className="md:col-span-6">
+            {copy.hero_quote && (
+              <blockquote className="font-display text-2xl md:text-4xl text-foreground leading-[1.15] text-balance italic">
+                {copy.hero_quote}
+              </blockquote>
+            )}
+            {copy.hero_quote_author && (
+              <p className="eyebrow mt-4 text-muted-foreground">{copy.hero_quote_author}</p>
+            )}
+          </div>
+          <div className="md:col-span-5 md:col-start-8">
+            <p className="text-muted-foreground text-base md:text-lg leading-relaxed">{copy.intro}</p>
           </div>
         </div>
       </motion.div>
