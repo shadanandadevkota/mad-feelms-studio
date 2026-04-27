@@ -219,6 +219,21 @@ const AdminDashboard = () => {
   const [rows, setRows] = useState<Record<string, ContentRow>>({});
   const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [busyKey, setBusyKey] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("work");
+  const [contactQuery, setContactQuery] = useState("");
+
+  const activeSection = useMemo(
+    () => NAV_SECTIONS.find((s) => s.value === activeTab) ?? NAV_SECTIONS[0],
+    [activeTab],
+  );
+
+  const filteredContacts = useMemo(() => {
+    const q = contactQuery.trim().toLowerCase();
+    if (!q) return contacts;
+    return contacts.filter((c) =>
+      [c.name, c.email, c.project_type ?? "", c.message].some((v) => v.toLowerCase().includes(q)),
+    );
+  }, [contacts, contactQuery]);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) navigate("/maddyy/login", { replace: true });
