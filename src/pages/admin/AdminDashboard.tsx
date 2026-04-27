@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -10,23 +10,31 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import {
-  Loader2, LogOut, Save, Trash2,
+  Loader2, LogOut, Save, Trash2, Search, ExternalLink, Mail, Copy as CopyIcon,
   Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox,
 } from "lucide-react";
 import { SectionManager, FieldDef } from "@/components/admin/SectionManager";
 
-const NAV_SECTIONS: Array<{ value: string; label: string; icon: React.ComponentType<{ className?: string }>; group: string }> = [
-  { value: "work", label: "Home Work", icon: Home, group: "Collections" },
-  { value: "wedding-films", label: "Wedding Films", icon: Film, group: "Collections" },
-  { value: "wedding-photos", label: "Wedding Photos", icon: Camera, group: "Collections" },
-  { value: "ads", label: "Ad Projects", icon: Megaphone, group: "Collections" },
-  { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections" },
-  { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections" },
-  { value: "media-services", label: "Services", icon: Wrench, group: "Collections" },
-  { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings" },
-  { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings" },
-  { value: "socials", label: "Socials", icon: Share2, group: "Site Settings" },
-  { value: "contacts", label: "Inbox", icon: Inbox, group: "Site Settings" },
+type NavItem = {
+  value: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  group: string;
+  description: string;
+};
+
+const NAV_SECTIONS: NavItem[] = [
+  { value: "work", label: "Home Work", icon: Home, group: "Collections", description: "Tiles in the Selected Work grid on the homepage." },
+  { value: "wedding-films", label: "Wedding Films", icon: Film, group: "Collections", description: "Films featured on the Wedding page grid." },
+  { value: "wedding-photos", label: "Wedding Photos", icon: Camera, group: "Collections", description: "Photo collage tiles on the Wedding Photos page." },
+  { value: "ads", label: "Ad Projects", icon: Megaphone, group: "Collections", description: "Commercial case studies — list and detail pages." },
+  { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections", description: "Fashion editorial projects with cover, gallery, credits." },
+  { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections", description: "Case studies on the Media Production page." },
+  { value: "media-services", label: "Services", icon: Wrench, group: "Collections", description: "Capabilities list on the Media Production page." },
+  { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings", description: "Headings, eyebrows and intro copy for every page." },
+  { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings", description: "Footer tagline, contact email and CTA label." },
+  { value: "socials", label: "Socials", icon: Share2, group: "Site Settings", description: "Public Instagram, YouTube and email URLs." },
+  { value: "contacts", label: "Inbox", icon: Inbox, group: "Site Settings", description: "Submissions from the website contact form." },
 ];
 
 type ContentRow = {
@@ -211,6 +219,21 @@ const AdminDashboard = () => {
   const [rows, setRows] = useState<Record<string, ContentRow>>({});
   const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [busyKey, setBusyKey] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string>("work");
+  const [contactQuery, setContactQuery] = useState("");
+
+  const activeSection = useMemo(
+    () => NAV_SECTIONS.find((s) => s.value === activeTab) ?? NAV_SECTIONS[0],
+    [activeTab],
+  );
+
+  const filteredContacts = useMemo(() => {
+    const q = contactQuery.trim().toLowerCase();
+    if (!q) return contacts;
+    return contacts.filter((c) =>
+      [c.name, c.email, c.project_type ?? "", c.message].some((v) => v.toLowerCase().includes(q)),
+    );
+  }, [contacts, contactQuery]);
 
   useEffect(() => {
     if (!loading && (!user || !isAdmin)) navigate("/maddyy/login", { replace: true });
@@ -272,7 +295,7 @@ const AdminDashboard = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <Tabs defaultValue="work" orientation="vertical" className="flex min-h-screen w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} orientation="vertical" className="flex min-h-screen w-full">
         {/* === Left sidebar === */}
         <aside className="sticky top-0 h-screen w-64 shrink-0 border-r border-border/60 bg-surface/40 backdrop-blur-xl flex flex-col">
           <div className="px-5 py-5 border-b border-border/60 flex items-center gap-3">
@@ -326,8 +349,37 @@ const AdminDashboard = () => {
 
         {/* === Main content === */}
         <div className="flex-1 min-w-0 relative">
-          <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-[28rem] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
+
+          {/* Sticky topbar with breadcrumb + view-site link */}
+          <div className="sticky top-0 z-20 border-b border-border/60 bg-background/75 backdrop-blur-xl">
+            <div className="px-6 md:px-10 py-4 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <activeSection.icon className="h-4 w-4 text-primary shrink-0" />
+                <span className="eyebrow text-muted-foreground/80 truncate">{activeSection.group}</span>
+                <span className="text-muted-foreground/40">/</span>
+                <span className="font-display text-sm tracking-tight truncate">{activeSection.label}</span>
+              </div>
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="hidden md:inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                View live site <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
+
           <div className="relative px-6 md:px-10 py-10 space-y-8">
+            {/* Section heading */}
+            <header className="space-y-2 max-w-3xl">
+              <p className="eyebrow text-primary">{activeSection.group}</p>
+              <h2 className="font-display text-4xl md:text-5xl tracking-tight leading-[0.95]">
+                {activeSection.label}
+              </h2>
+              <p className="text-sm text-muted-foreground">{activeSection.description}</p>
+            </header>
 
           <TabsContent value="work">
             <SectionManager
@@ -503,28 +555,87 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="contacts">
-            <div className="grid gap-4">
-              {contacts.length === 0 && (
-                <p className="text-muted-foreground text-sm">No submissions yet.</p>
-              )}
-              {contacts.map((c) => (
-                <Card key={c.id} className="p-5 bg-surface border-border">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-display text-lg">{c.name}</p>
-                      <p className="text-sm text-muted-foreground">
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="relative flex-1 min-w-[260px] max-w-md">
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <Input
+                    value={contactQuery}
+                    onChange={(e) => setContactQuery(e.target.value)}
+                    placeholder="Search name, email, message…"
+                    className="pl-9 bg-surface border-border"
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {filteredContacts.length} of {contacts.length}
+                </span>
+              </div>
+
+              {contacts.length === 0 ? (
+                <div className="border border-dashed border-border rounded-lg py-16 text-center">
+                  <Inbox className="h-6 w-6 mx-auto text-muted-foreground mb-2" />
+                  <p className="text-sm text-muted-foreground">No submissions yet.</p>
+                </div>
+              ) : filteredContacts.length === 0 ? (
+                <p className="text-muted-foreground text-sm">No matches for “{contactQuery}”.</p>
+              ) : (
+                <div className="grid gap-3">
+                  {filteredContacts.map((c) => (
+                    <Card key={c.id} className="p-5 bg-surface border-border hover:border-border/80 transition-colors group">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="font-display text-lg leading-tight">{c.name}</p>
+                            {c.project_type && (
+                              <span className="eyebrow text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/30">
+                                {c.project_type}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {new Date(c.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                          <a
+                            href={`mailto:${c.email}`}
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition"
+                            title="Reply by email"
+                          >
+                            <Mail className="h-4 w-4" />
+                          </a>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(c.email);
+                              toast.success("Email copied");
+                            }}
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition"
+                            title="Copy email"
+                          >
+                            <CopyIcon className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteContact(c.id)}
+                            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition"
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                      <a
+                        href={`mailto:${c.email}`}
+                        className="inline-block mt-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
                         {c.email}
-                        {c.project_type ? ` · ${c.project_type}` : ""} ·{" "}
-                        {new Date(c.created_at).toLocaleString()}
+                      </a>
+                      <p className="mt-3 text-sm whitespace-pre-wrap text-foreground/90 leading-relaxed border-l-2 border-primary/40 pl-4">
+                        {c.message}
                       </p>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => deleteContact(c.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <p className="mt-3 text-sm whitespace-pre-wrap">{c.message}</p>
-                </Card>
-              ))}
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           </TabsContent>
           </div>
