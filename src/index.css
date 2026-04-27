@@ -136,4 +136,45 @@
   .perspective-1000 { perspective: 1500px; }
   .preserve-3d { transform-style: preserve-3d; }
   .backface-hidden { backface-visibility: hidden; }
+
+  /* Blur veil — Spark+Riot inspired hover treatment.
+     Sibling tiles blur and dim while one is focused.
+     Apply `.blur-veil` to a wrapper and `.blur-veil-item` to children. */
+  .blur-veil { --veil-blur: 6px; --veil-opacity: 0.45; }
+  .blur-veil-item {
+    transition: filter 0.7s var(--ease-cinematic), opacity 0.7s var(--ease-cinematic), transform 0.9s var(--ease-cinematic);
+    will-change: filter, opacity, transform;
+  }
+  @media (hover: hover) {
+    .blur-veil:hover .blur-veil-item {
+      filter: blur(var(--veil-blur)) saturate(0.85);
+      opacity: var(--veil-opacity);
+    }
+    .blur-veil .blur-veil-item:hover {
+      filter: blur(0) saturate(1.05);
+      opacity: 1;
+      transform: scale(1.01);
+    }
+  }
+
+  /* Cinematic page-load blur — pulls focus on first paint, like a lens settling. */
+  .blur-in {
+    animation: blur-in 1.4s var(--ease-cinematic) both;
+  }
+  @keyframes blur-in {
+    0%   { filter: blur(20px); opacity: 0; transform: scale(1.04); }
+    60%  { opacity: 1; }
+    100% { filter: blur(0); opacity: 1; transform: scale(1); }
+  }
+
+  /* Soft grain/blur backdrop for hero stacks */
+  .veil-soft::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    backdrop-filter: blur(2px);
+    background: radial-gradient(circle at 50% 70%, hsl(var(--background)/0.0) 0%, hsl(var(--background)/0.5) 70%, hsl(var(--background)/0.85) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
 }
