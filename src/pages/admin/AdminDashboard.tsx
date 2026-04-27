@@ -555,28 +555,87 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="contacts">
-            <div className="grid gap-4">
-              {contacts.length === 0 && (
-                <p className="text-muted-foreground text-sm">No submissions yet.</p>
-              )}
-              {contacts.map((c) => (
-                <Card key={c.id} className="p-5 bg-surface border-border">
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <p className="font-display text-lg">{c.name}</p>
-                      <p className="text-sm text-muted-foreground">
+            <div className="space-y-5">
+              <div className="flex items-center gap-3 flex-wrap">
+                <div className="relative flex-1 min-w-[260px] max-w-md">
+                  <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                  <Input
+                    value={contactQuery}
+                    onChange={(e) => setContactQuery(e.target.value)}
+                    placeholder="Search name, email, message…"
+                    className="pl-9 bg-surface border-border"
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground">
+                  {filteredContacts.length} of {contacts.length}
+                </span>
+              </div>
+
+              {contacts.length === 0 ? (
+                <div className="border border-dashed border-border rounded-lg py-16 text-center">
+                  <Inbox className="h-6 w-6 mx-auto text-muted-foreground mb-2" />
+                  <p className="text-sm text-muted-foreground">No submissions yet.</p>
+                </div>
+              ) : filteredContacts.length === 0 ? (
+                <p className="text-muted-foreground text-sm">No matches for “{contactQuery}”.</p>
+              ) : (
+                <div className="grid gap-3">
+                  {filteredContacts.map((c) => (
+                    <Card key={c.id} className="p-5 bg-surface border-border hover:border-border/80 transition-colors group">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <p className="font-display text-lg leading-tight">{c.name}</p>
+                            {c.project_type && (
+                              <span className="eyebrow text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/30">
+                                {c.project_type}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {new Date(c.created_at).toLocaleString()}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-1 opacity-70 group-hover:opacity-100 transition-opacity">
+                          <a
+                            href={`mailto:${c.email}`}
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition"
+                            title="Reply by email"
+                          >
+                            <Mail className="h-4 w-4" />
+                          </a>
+                          <button
+                            onClick={() => {
+                              navigator.clipboard.writeText(c.email);
+                              toast.success("Email copied");
+                            }}
+                            className="p-2 text-muted-foreground hover:text-foreground hover:bg-background/60 rounded transition"
+                            title="Copy email"
+                          >
+                            <CopyIcon className="h-4 w-4" />
+                          </button>
+                          <button
+                            onClick={() => deleteContact(c.id)}
+                            className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded transition"
+                            title="Delete"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                      <a
+                        href={`mailto:${c.email}`}
+                        className="inline-block mt-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                      >
                         {c.email}
-                        {c.project_type ? ` · ${c.project_type}` : ""} ·{" "}
-                        {new Date(c.created_at).toLocaleString()}
+                      </a>
+                      <p className="mt-3 text-sm whitespace-pre-wrap text-foreground/90 leading-relaxed border-l-2 border-primary/40 pl-4">
+                        {c.message}
                       </p>
-                    </div>
-                    <Button variant="ghost" size="sm" onClick={() => deleteContact(c.id)}>
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-                  <p className="mt-3 text-sm whitespace-pre-wrap">{c.message}</p>
-                </Card>
-              ))}
+                    </Card>
+                  ))}
+                </div>
+              )}
             </div>
           </TabsContent>
           </div>
