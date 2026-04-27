@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
 import { supabase } from "@/integrations/supabase/client";
+import { useCollection } from "@/hooks/useCollection";
 
 type Credit = { label: string; value: string };
 
@@ -139,7 +140,80 @@ const FashionEditorialDetail = () => {
           </div>
         </section>
       )}
+
+      <OtherEditorials currentSlug={e.slug} />
     </PageShell>
+  );
+};
+
+type EditorialPreview = {
+  id: string;
+  slug: string;
+  title: string;
+  publication: string | null;
+  year: string | null;
+  cover_url: string | null;
+  is_visible: boolean;
+  sort_order: number;
+};
+
+const OtherEditorials = ({ currentSlug }: { currentSlug: string }) => {
+  const { items } = useCollection<EditorialPreview>("editorial_projects");
+  const others = items.filter((e) => e.slug !== currentSlug).slice(0, 6);
+  if (!others.length) return null;
+  return (
+    <section className="bg-surface-elevated py-20 md:py-28 px-6 md:px-10 border-t border-border/40">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 md:mb-14 gap-4">
+          <div>
+            <p className="eyebrow mb-3">More editorials</p>
+            <h2 className="font-display text-3xl sm:text-4xl md:text-6xl text-foreground leading-[0.95]">
+              Continue <span className="italic text-primary">reading</span>
+            </h2>
+          </div>
+          <Link
+            to="/fashion-editorial"
+            className="self-start md:self-end inline-flex items-center gap-2 px-5 py-3 border border-foreground/40 hover:bg-foreground hover:text-background transition-all duration-500 eyebrow"
+          >
+            All editorials →
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 blur-veil">
+          {others.map((o, i) => (
+            <motion.article
+              key={o.id}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+              className="blur-veil-item"
+            >
+              <Link to={`/fashion-editorial/${o.slug}`} className="group block aspect-[4/5] relative overflow-hidden bg-background">
+                {o.cover_url && (
+                  <img
+                    src={o.cover_url}
+                    alt={o.title}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                  {(o.publication || o.year) && (
+                    <p className="eyebrow mb-2">
+                      {o.publication}
+                      {o.publication && o.year ? " · " : ""}
+                      {o.year}
+                    </p>
+                  )}
+                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl text-foreground leading-tight">{o.title}</h3>
+                </div>
+              </Link>
+            </motion.article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

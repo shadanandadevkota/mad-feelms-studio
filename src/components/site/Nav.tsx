@@ -8,7 +8,7 @@ const navItems = [
   { label: "Ad Commercials", href: "/ad-commercials" },
   { label: "Fashion Editorial", href: "/fashion-editorial" },
   { label: "Media Production", href: "/media-production" },
-  { label: "About", href: "/#about" },
+  { label: "About", href: "/about" },
   { label: "Contact", href: "/#contact" },
 ];
 
