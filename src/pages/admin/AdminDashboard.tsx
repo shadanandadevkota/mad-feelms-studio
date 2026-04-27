@@ -162,6 +162,9 @@ const PAGE_KEYS: Array<{ key: string; label: string; fields: Array<{ k: string; 
     key: "page_media_production",
     label: "Media Production",
     fields: [
+      { k: "hero_image_url", label: "Landing background image URL" },
+      { k: "hero_quote", label: "Hero quote", multiline: true },
+      { k: "hero_quote_author", label: "Hero quote author" },
       { k: "title_line_1", label: "Title line 1" },
       { k: "title_line_2", label: "Title line 2" },
       { k: "title_accent", label: "Title accent (italic) — e.g. behave" },
