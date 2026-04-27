@@ -295,7 +295,7 @@ const AdminDashboard = () => {
 
   return (
     <main className="min-h-screen bg-background text-foreground">
-      <Tabs defaultValue="work" orientation="vertical" className="flex min-h-screen w-full">
+      <Tabs value={activeTab} onValueChange={setActiveTab} orientation="vertical" className="flex min-h-screen w-full">
         {/* === Left sidebar === */}
         <aside className="sticky top-0 h-screen w-64 shrink-0 border-r border-border/60 bg-surface/40 backdrop-blur-xl flex flex-col">
           <div className="px-5 py-5 border-b border-border/60 flex items-center gap-3">
@@ -349,8 +349,37 @@ const AdminDashboard = () => {
 
         {/* === Main content === */}
         <div className="flex-1 min-w-0 relative">
-          <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 top-0 h-[28rem] bg-gradient-to-b from-primary/10 via-primary/5 to-transparent pointer-events-none" />
+
+          {/* Sticky topbar with breadcrumb + view-site link */}
+          <div className="sticky top-0 z-20 border-b border-border/60 bg-background/75 backdrop-blur-xl">
+            <div className="px-6 md:px-10 py-4 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 min-w-0">
+                <activeSection.icon className="h-4 w-4 text-primary shrink-0" />
+                <span className="eyebrow text-muted-foreground/80 truncate">{activeSection.group}</span>
+                <span className="text-muted-foreground/40">/</span>
+                <span className="font-display text-sm tracking-tight truncate">{activeSection.label}</span>
+              </div>
+              <a
+                href="/"
+                target="_blank"
+                rel="noreferrer"
+                className="hidden md:inline-flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors"
+              >
+                View live site <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          </div>
+
           <div className="relative px-6 md:px-10 py-10 space-y-8">
+            {/* Section heading */}
+            <header className="space-y-2 max-w-3xl">
+              <p className="eyebrow text-primary">{activeSection.group}</p>
+              <h2 className="font-display text-4xl md:text-5xl tracking-tight leading-[0.95]">
+                {activeSection.label}
+              </h2>
+              <p className="text-sm text-muted-foreground">{activeSection.description}</p>
+            </header>
 
           <TabsContent value="work">
             <SectionManager
