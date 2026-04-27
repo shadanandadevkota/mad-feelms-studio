@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
@@ -10,23 +10,31 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import {
-  Loader2, LogOut, Save, Trash2,
+  Loader2, LogOut, Save, Trash2, Search, ExternalLink, Mail, Copy as CopyIcon,
   Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox,
 } from "lucide-react";
 import { SectionManager, FieldDef } from "@/components/admin/SectionManager";
 
-const NAV_SECTIONS: Array<{ value: string; label: string; icon: React.ComponentType<{ className?: string }>; group: string }> = [
-  { value: "work", label: "Home Work", icon: Home, group: "Collections" },
-  { value: "wedding-films", label: "Wedding Films", icon: Film, group: "Collections" },
-  { value: "wedding-photos", label: "Wedding Photos", icon: Camera, group: "Collections" },
-  { value: "ads", label: "Ad Projects", icon: Megaphone, group: "Collections" },
-  { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections" },
-  { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections" },
-  { value: "media-services", label: "Services", icon: Wrench, group: "Collections" },
-  { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings" },
-  { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings" },
-  { value: "socials", label: "Socials", icon: Share2, group: "Site Settings" },
-  { value: "contacts", label: "Inbox", icon: Inbox, group: "Site Settings" },
+type NavItem = {
+  value: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  group: string;
+  description: string;
+};
+
+const NAV_SECTIONS: NavItem[] = [
+  { value: "work", label: "Home Work", icon: Home, group: "Collections", description: "Tiles in the Selected Work grid on the homepage." },
+  { value: "wedding-films", label: "Wedding Films", icon: Film, group: "Collections", description: "Films featured on the Wedding page grid." },
+  { value: "wedding-photos", label: "Wedding Photos", icon: Camera, group: "Collections", description: "Photo collage tiles on the Wedding Photos page." },
+  { value: "ads", label: "Ad Projects", icon: Megaphone, group: "Collections", description: "Commercial case studies — list and detail pages." },
+  { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections", description: "Fashion editorial projects with cover, gallery, credits." },
+  { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections", description: "Case studies on the Media Production page." },
+  { value: "media-services", label: "Services", icon: Wrench, group: "Collections", description: "Capabilities list on the Media Production page." },
+  { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings", description: "Headings, eyebrows and intro copy for every page." },
+  { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings", description: "Footer tagline, contact email and CTA label." },
+  { value: "socials", label: "Socials", icon: Share2, group: "Site Settings", description: "Public Instagram, YouTube and email URLs." },
+  { value: "contacts", label: "Inbox", icon: Inbox, group: "Site Settings", description: "Submissions from the website contact form." },
 ];
 
 type ContentRow = {
