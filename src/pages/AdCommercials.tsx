@@ -49,7 +49,7 @@ const AdCommercials = () => {
   return (
     <PageShell>
       <section
-        className="relative h-screen w-full overflow-hidden vignette"
+        className="relative min-h-[100svh] w-full overflow-hidden vignette"
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
       >
@@ -69,14 +69,14 @@ const AdCommercials = () => {
           <img src={featured.hero_image_url} alt={featured.title} className="absolute inset-0 h-full w-full object-cover" />
         ) : null}
 
-        <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-background/40 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/30 to-background/40 pointer-events-none" />
 
         {featured.eyebrow && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.8 }}
-            className="absolute top-24 left-1/2 -translate-x-1/2 eyebrow text-foreground/80 hidden md:block"
+            className="absolute top-20 md:top-24 left-1/2 -translate-x-1/2 eyebrow text-foreground/80 px-4 text-center w-full"
           >
             {featured.eyebrow}
           </motion.div>
@@ -84,10 +84,10 @@ const AdCommercials = () => {
 
         <Link
           to={`/ad-commercials/${featured.slug}`}
-          className="absolute inset-x-0 bottom-12 md:bottom-20 flex flex-col items-center text-center px-6 group"
+          className="absolute inset-x-0 bottom-10 sm:bottom-14 md:bottom-20 flex flex-col items-center text-center px-4 sm:px-6 group"
         >
-          <motion.div animate={{ y: hover ? -10 : 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}>
-            <h1 className="font-display text-6xl md:text-8xl lg:text-9xl text-foreground leading-[0.9]">
+          <motion.div animate={{ y: hover ? -10 : 0 }} transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }} className="w-full">
+            <h1 className="font-display text-5xl sm:text-6xl md:text-8xl lg:text-9xl text-foreground leading-[0.9] text-balance break-words">
               {featured.title_lead ?? featured.title}{" "}
               {featured.title_accent && <span className="italic text-primary">{featured.title_accent}</span>}
             </h1>
@@ -98,7 +98,7 @@ const AdCommercials = () => {
               initial={false}
               animate={{ opacity: hover ? 1 : 0, y: hover ? 0 : 20 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-3"
+              className="mt-5 md:mt-6 hidden md:flex flex-wrap items-center justify-center gap-x-8 lg:gap-x-10 gap-y-3 max-w-3xl"
             >
               {featured.credits.map((c) => (
                 <Credit key={c.label} label={c.label} value={c.value} />
@@ -106,57 +106,72 @@ const AdCommercials = () => {
             </motion.div>
           )}
 
+          {/* Mobile: always-visible compact credits */}
+          {featured.credits?.length > 0 && (
+            <div className="mt-4 flex md:hidden flex-wrap items-center justify-center gap-x-5 gap-y-2 max-w-md">
+              {featured.credits.slice(0, 3).map((c) => (
+                <Credit key={c.label} label={c.label} value={c.value} compact />
+              ))}
+            </div>
+          )}
+
           <motion.div
             animate={{ opacity: hover ? 1 : 0, y: hover ? 0 : 12 }}
             transition={{ duration: 0.5, delay: hover ? 0.15 : 0 }}
-            className="mt-8 inline-flex items-center gap-2 px-5 py-3 border border-foreground/50 bg-background/30 backdrop-blur-sm"
+            className="mt-6 md:mt-8 hidden md:inline-flex items-center gap-2 px-5 py-3 border border-foreground/50 bg-background/30 backdrop-blur-sm"
           >
             <span className="eyebrow text-foreground">View More →</span>
           </motion.div>
+
+          {/* Mobile CTA — always visible */}
+          <span className="mt-5 md:hidden inline-flex items-center gap-2 px-4 py-2.5 border border-foreground/50 bg-background/30 backdrop-blur-sm eyebrow text-foreground">
+            View More →
+          </span>
         </Link>
 
         <motion.div
           animate={{ opacity: hover ? 0 : 1 }}
-          className="absolute bottom-6 right-6 eyebrow text-muted-foreground hidden md:block"
+          className="absolute bottom-6 right-6 eyebrow text-muted-foreground hidden lg:block"
         >
           Hover for credits
         </motion.div>
       </section>
 
       {others.length > 0 && (
-        <section className="bg-surface-elevated py-24 md:py-32 px-6 md:px-10">
+        <section className="bg-surface-elevated py-20 md:py-28 lg:py-32 px-4 sm:px-6 md:px-10">
           <div className="max-w-7xl mx-auto">
-            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-10 md:mb-14 gap-4">
               <div>
                 <p className="eyebrow mb-3">{copy.list_eyebrow}</p>
-                <h2 className="font-display text-4xl md:text-6xl text-foreground">
+                <h2 className="font-display text-3xl sm:text-4xl md:text-6xl text-foreground leading-[0.95]">
                   {copy.list_title_lead} <span className="italic text-primary">{copy.list_title_accent}</span> {copy.list_title_tail}
                 </h2>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 blur-veil">
               {others.map((c, i) => (
                 <motion.article
                   key={c.id}
                   initial={{ opacity: 0, y: 40 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ duration: 0.8, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  className="blur-veil-item"
                 >
                   <Link to={`/ad-commercials/${c.slug}`} className="group block aspect-[4/5] relative overflow-hidden bg-background">
                     {c.hero_image_url && (
                       <img
                         src={c.hero_image_url}
                         alt={c.title}
-                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] group-hover:scale-105"
+                        className="absolute inset-0 h-full w-full object-cover"
                         loading="lazy"
                       />
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-background/85 to-transparent" />
-                    <div className="absolute inset-x-0 bottom-0 p-6">
+                    <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
                       {c.year && <p className="eyebrow mb-2">{c.year}</p>}
-                      <h3 className="font-display text-2xl md:text-3xl text-foreground">{c.title}</h3>
+                      <h3 className="font-display text-xl sm:text-2xl md:text-3xl text-foreground leading-tight">{c.title}</h3>
                     </div>
                   </Link>
                 </motion.article>
@@ -169,10 +184,10 @@ const AdCommercials = () => {
   );
 };
 
-const Credit = ({ label, value }: { label: string; value: string }) => (
+const Credit = ({ label, value, compact }: { label: string; value: string; compact?: boolean }) => (
   <div className="text-center">
-    <div className="eyebrow text-muted-foreground mb-1">{label}</div>
-    <div className="font-display text-foreground text-base md:text-lg">{value}</div>
+    <div className={`eyebrow text-muted-foreground mb-1 ${compact ? "text-[10px]" : ""}`}>{label}</div>
+    <div className={`font-display text-foreground ${compact ? "text-sm" : "text-base md:text-lg"}`}>{value}</div>
   </div>
 );
 
