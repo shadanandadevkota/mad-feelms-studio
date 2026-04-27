@@ -49,23 +49,26 @@ const Header = () => {
 const PhotosSection = () => {
   const { items: photos } = useCollection<Photo>("wedding_photos");
   return (
-    <section className="px-6 md:px-10 pb-32">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
+    <section className="px-6 md:px-10 pb-24 md:pb-32">
+      <div className="max-w-7xl mx-auto columns-1 sm:columns-2 lg:columns-3 gap-4 md:gap-5 blur-veil">
         {photos.map((p, i) => (
           <motion.figure
             key={p.id}
-            initial={{ opacity: 0, y: 60 }}
+            initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.9, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative overflow-hidden bg-surface ${p.col_span} ${p.aspect}`}
+            transition={{ duration: 0.9, delay: (i % 3) * 0.06, ease: [0.16, 1, 0.3, 1] }}
+            className="blur-veil-item relative overflow-hidden bg-surface mb-4 md:mb-5 break-inside-avoid"
           >
             <img
               src={p.image_url}
               alt={p.caption ?? `Wedding photo ${i + 1}`}
-              className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1.4s] hover:scale-105"
+              className="block w-full h-auto object-cover"
               loading="lazy"
             />
+            {p.caption && (
+              <figcaption className="eyebrow text-muted-foreground mt-2 px-1">{p.caption}</figcaption>
+            )}
           </motion.figure>
         ))}
       </div>
