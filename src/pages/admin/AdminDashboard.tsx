@@ -201,10 +201,22 @@ const WORK_FIELDS: FieldDef[] = [
 ];
 
 const WEDDING_FILMS_FIELDS: FieldDef[] = [
+  { key: "slug", label: "Slug (URL)", type: "text", placeholder: "ana-and-leo" },
   { key: "title", label: "Title", type: "text" },
   { key: "place", label: "Place", type: "text" },
   { key: "year", label: "Year", type: "text" },
+  { key: "image_url", label: "Thumbnail image", type: "image" },
+  { key: "video_url", label: "Video / external link (YouTube, Vimeo, mp4)", type: "text", placeholder: "https://youtu.be/…" },
+  { key: "intro", label: "Description", type: "textarea" },
+  { key: "credits", label: "Credits — array of {label, value}", type: "json" },
+];
+
+const ABOUT_STORY_FIELDS: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "eyebrow", label: "Eyebrow", type: "text" },
+  { key: "body", label: "Short body / excerpt", type: "textarea" },
   { key: "image_url", label: "Image", type: "image" },
+  { key: "link_url", label: "Link (optional)", type: "text", placeholder: "/wedding or https://…" },
 ];
 
 const WEDDING_PHOTOS_FIELDS: FieldDef[] = [
