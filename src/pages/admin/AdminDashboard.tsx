@@ -447,9 +447,18 @@ const AdminDashboard = () => {
           <TabsContent value="wedding-films">
             <SectionManager
               table="wedding_films"
-              title="Wedding Photos — Films grid"
+              title="Wedding — Films"
               fields={WEDDING_FILMS_FIELDS}
-              defaults={{ title: "New film", place: "", year: "", image_url: "" }}
+              defaults={{
+                slug: `film-${Date.now().toString(36).slice(-5)}`,
+                title: "New film",
+                place: "",
+                year: new Date().getFullYear().toString(),
+                image_url: "",
+                video_url: "",
+                intro: "",
+                credits: [],
+              }}
               renderLabel={(it) => `${it.title} · ${it.place ?? ""}`}
             />
           </TabsContent>
