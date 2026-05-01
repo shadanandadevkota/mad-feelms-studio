@@ -138,6 +138,9 @@ const PAGE_KEYS: Array<{ key: string; label: string; fields: Array<{ k: string; 
       { k: "cta_title_lead", label: "CTA title lead" },
       { k: "cta_title_accent", label: "CTA title accent" },
       { k: "cta_button_label", label: "CTA button label" },
+      { k: "stories_eyebrow", label: "Stories — eyebrow" },
+      { k: "stories_title_lead", label: "Stories — title lead" },
+      { k: "stories_title_accent", label: "Stories — title accent" },
     ],
   },
   {
