@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      about_stories: {
+        Row: {
+          body: string | null
+          created_at: string
+          eyebrow: string | null
+          id: string
+          image_url: string | null
+          is_visible: boolean
+          link_url: string | null
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          eyebrow?: string | null
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          link_url?: string | null
+          sort_order?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          eyebrow?: string | null
+          id?: string
+          image_url?: string | null
+          is_visible?: boolean
+          link_url?: string | null
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ad_projects: {
         Row: {
           created_at: string
@@ -266,35 +305,47 @@ export type Database = {
       wedding_films: {
         Row: {
           created_at: string
+          credits: Json
           id: string
           image_url: string | null
+          intro: string | null
           is_visible: boolean
           place: string | null
+          slug: string | null
           sort_order: number
           title: string
           updated_at: string
+          video_url: string | null
           year: string | null
         }
         Insert: {
           created_at?: string
+          credits?: Json
           id?: string
           image_url?: string | null
+          intro?: string | null
           is_visible?: boolean
           place?: string | null
+          slug?: string | null
           sort_order?: number
           title: string
           updated_at?: string
+          video_url?: string | null
           year?: string | null
         }
         Update: {
           created_at?: string
+          credits?: Json
           id?: string
           image_url?: string | null
+          intro?: string | null
           is_visible?: boolean
           place?: string | null
+          slug?: string | null
           sort_order?: number
           title?: string
           updated_at?: string
+          video_url?: string | null
           year?: string | null
         }
         Relationships: []
