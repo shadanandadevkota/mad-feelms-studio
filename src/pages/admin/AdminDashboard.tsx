@@ -31,6 +31,7 @@ const NAV_SECTIONS: NavItem[] = [
   { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections", description: "Fashion editorial projects with cover, gallery, credits." },
   { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections", description: "Case studies on the Media Production page." },
   { value: "media-services", label: "Services", icon: Wrench, group: "Collections", description: "Capabilities list on the Media Production page." },
+  { value: "about-stories", label: "About Stories", icon: BookOpen, group: "Collections", description: "Editorial story tiles displayed on the About page." },
   { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings", description: "Headings, eyebrows and intro copy for every page." },
   { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings", description: "Footer tagline, contact email and CTA label." },
   { value: "socials", label: "Socials", icon: Share2, group: "Site Settings", description: "Public Instagram, YouTube and email URLs." },
