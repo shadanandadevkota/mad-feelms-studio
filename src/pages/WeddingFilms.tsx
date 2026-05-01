@@ -6,6 +6,7 @@ import { useSiteContent } from "@/hooks/useSiteContent";
 
 type Film = {
   id: string;
+  slug: string | null;
   title: string;
   place: string | null;
   year: string | null;
