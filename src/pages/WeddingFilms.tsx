@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+
 import { PageShell } from "@/components/site/PageShell";
 import { useCollection } from "@/hooks/useCollection";
 import { useSiteContent } from "@/hooks/useSiteContent";
