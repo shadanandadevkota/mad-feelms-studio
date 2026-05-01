@@ -137,14 +137,17 @@
   .preserve-3d { transform-style: preserve-3d; }
   .backface-hidden { backface-visibility: hidden; }
 
-  /* Blur veil — Spark+Riot inspired hover treatment.
-     Sibling tiles blur and dim while one is focused.
-     Apply `.blur-veil` to a wrapper and `.blur-veil-item` to children. */
+  /* Blur veil — Spark+Riot inspired focus treatment.
+     Sibling tiles blur and dim while one is focused (hover OR tap).
+     Apply `.blur-veil` to a wrapper and `.blur-veil-item` to children.
+     Touch: tapping/focusing a tile activates `.is-focused` (set via JS)
+     or `:focus-within` for keyboard. */
   .blur-veil { --veil-blur: 6px; --veil-opacity: 0.45; }
   .blur-veil-item {
     transition: filter 0.7s var(--ease-cinematic), opacity 0.7s var(--ease-cinematic), transform 0.9s var(--ease-cinematic);
     will-change: filter, opacity, transform;
   }
+  /* Hover devices */
   @media (hover: hover) {
     .blur-veil:hover .blur-veil-item {
       filter: blur(var(--veil-blur)) saturate(0.85);
@@ -155,6 +158,28 @@
       opacity: 1;
       transform: scale(1.01);
     }
+  }
+  /* Touch / keyboard — tap or focus a tile to focus it; siblings blur */
+  .blur-veil:focus-within .blur-veil-item,
+  .blur-veil.has-focused .blur-veil-item {
+    filter: blur(var(--veil-blur)) saturate(0.85);
+    opacity: var(--veil-opacity);
+  }
+  .blur-veil .blur-veil-item:focus-within,
+  .blur-veil .blur-veil-item.is-focused {
+    filter: blur(0) saturate(1.05);
+    opacity: 1;
+    transform: scale(1.01);
+  }
+
+  /* Scatter-in — motion-blurred entrance inspired by the PROJECTS reel.
+     Tiles fall into place from random offsets with directional blur,
+     then settle into a clean grid. Stagger via `--scatter-delay`. */
+  .scatter-in { animation: scatter-in 1.4s var(--ease-cinematic) both; animation-delay: var(--scatter-delay, 0ms); }
+  @keyframes scatter-in {
+    0%   { filter: blur(18px); opacity: 0; transform: translate3d(var(--scatter-x, -8%), var(--scatter-y, 12%), 0) scale(0.92) rotate(var(--scatter-r, -2deg)); }
+    55%  { filter: blur(6px); opacity: 1; }
+    100% { filter: blur(0); opacity: 1; transform: translate3d(0,0,0) scale(1) rotate(0); }
   }
 
   /* Cinematic page-load blur — pulls focus on first paint, like a lens settling. */
