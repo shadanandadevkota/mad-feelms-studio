@@ -18,7 +18,8 @@ export function useCollection<T extends { id: string; sort_order: number; is_vis
     | "ad_projects"
     | "editorial_projects"
     | "media_cases"
-    | "media_services",
+    | "media_services"
+    | "about_stories",
   opts: { onlyVisible?: boolean } = { onlyVisible: true },
 ) {
   const [items, setItems] = useState<T[]>([]);

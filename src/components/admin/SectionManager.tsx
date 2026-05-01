@@ -58,7 +58,8 @@ type Table =
   | "ad_projects"
   | "editorial_projects"
   | "media_cases"
-  | "media_services";
+  | "media_services"
+  | "about_stories";
 
 type Props = {
   table: Table;

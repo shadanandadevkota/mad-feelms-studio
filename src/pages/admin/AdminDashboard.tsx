@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import {
   Loader2, LogOut, Save, Trash2, Search, ExternalLink, Mail, Copy as CopyIcon,
-  Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox,
+  Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox, BookOpen,
 } from "lucide-react";
 import { SectionManager, FieldDef } from "@/components/admin/SectionManager";
 
@@ -31,6 +31,7 @@ const NAV_SECTIONS: NavItem[] = [
   { value: "editorials", label: "Editorials", icon: Newspaper, group: "Collections", description: "Fashion editorial projects with cover, gallery, credits." },
   { value: "media-cases", label: "Media Cases", icon: Briefcase, group: "Collections", description: "Case studies on the Media Production page." },
   { value: "media-services", label: "Services", icon: Wrench, group: "Collections", description: "Capabilities list on the Media Production page." },
+  { value: "about-stories", label: "About Stories", icon: BookOpen, group: "Collections", description: "Editorial story tiles displayed on the About page." },
   { value: "pages", label: "Page Copy", icon: FileText, group: "Site Settings", description: "Headings, eyebrows and intro copy for every page." },
   { value: "footer", label: "Footer", icon: PanelBottom, group: "Site Settings", description: "Footer tagline, contact email and CTA label." },
   { value: "socials", label: "Socials", icon: Share2, group: "Site Settings", description: "Public Instagram, YouTube and email URLs." },
@@ -137,6 +138,9 @@ const PAGE_KEYS: Array<{ key: string; label: string; fields: Array<{ k: string; 
       { k: "cta_title_lead", label: "CTA title lead" },
       { k: "cta_title_accent", label: "CTA title accent" },
       { k: "cta_button_label", label: "CTA button label" },
+      { k: "stories_eyebrow", label: "Stories — eyebrow" },
+      { k: "stories_title_lead", label: "Stories — title lead" },
+      { k: "stories_title_accent", label: "Stories — title accent" },
     ],
   },
   {
@@ -200,10 +204,22 @@ const WORK_FIELDS: FieldDef[] = [
 ];
 
 const WEDDING_FILMS_FIELDS: FieldDef[] = [
+  { key: "slug", label: "Slug (URL)", type: "text", placeholder: "ana-and-leo" },
   { key: "title", label: "Title", type: "text" },
   { key: "place", label: "Place", type: "text" },
   { key: "year", label: "Year", type: "text" },
+  { key: "image_url", label: "Thumbnail image", type: "image" },
+  { key: "video_url", label: "Video / external link (YouTube, Vimeo, mp4)", type: "text", placeholder: "https://youtu.be/…" },
+  { key: "intro", label: "Description", type: "textarea" },
+  { key: "credits", label: "Credits — array of {label, value}", type: "json" },
+];
+
+const ABOUT_STORY_FIELDS: FieldDef[] = [
+  { key: "title", label: "Title", type: "text" },
+  { key: "eyebrow", label: "Eyebrow", type: "text" },
+  { key: "body", label: "Short body / excerpt", type: "textarea" },
   { key: "image_url", label: "Image", type: "image" },
+  { key: "link_url", label: "Link (optional)", type: "text", placeholder: "/wedding or https://…" },
 ];
 
 const WEDDING_PHOTOS_FIELDS: FieldDef[] = [
@@ -431,9 +447,18 @@ const AdminDashboard = () => {
           <TabsContent value="wedding-films">
             <SectionManager
               table="wedding_films"
-              title="Wedding Photos — Films grid"
+              title="Wedding — Films"
               fields={WEDDING_FILMS_FIELDS}
-              defaults={{ title: "New film", place: "", year: "", image_url: "" }}
+              defaults={{
+                slug: `film-${Date.now().toString(36).slice(-5)}`,
+                title: "New film",
+                place: "",
+                year: new Date().getFullYear().toString(),
+                image_url: "",
+                video_url: "",
+                intro: "",
+                credits: [],
+              }}
               renderLabel={(it) => `${it.title} · ${it.place ?? ""}`}
             />
           </TabsContent>
@@ -508,6 +533,16 @@ const AdminDashboard = () => {
               fields={MEDIA_SERVICE_FIELDS}
               defaults={{ name: "New service" }}
               renderLabel={(it) => it.name}
+            />
+          </TabsContent>
+
+          <TabsContent value="about-stories">
+            <SectionManager
+              table="about_stories"
+              title="About — Stories"
+              fields={ABOUT_STORY_FIELDS}
+              defaults={{ title: "New story", eyebrow: "", body: "", image_url: "", link_url: "" }}
+              renderLabel={(it) => `${it.title}${it.eyebrow ? ` · ${it.eyebrow}` : ""}`}
             />
           </TabsContent>
 

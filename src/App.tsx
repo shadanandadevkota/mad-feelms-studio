@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import Wedding from "./pages/Wedding.tsx";
 import WeddingPhotos from "./pages/WeddingPhotos.tsx";
 import WeddingFilms from "./pages/WeddingFilms.tsx";
+import WeddingFilmDetail from "./pages/WeddingFilmDetail.tsx";
 import AdCommercials from "./pages/AdCommercials.tsx";
 import AdCommercialDetail from "./pages/AdCommercialDetail.tsx";
 import FashionEditorial from "./pages/FashionEditorial.tsx";
@@ -30,6 +31,7 @@ const AnimatedRoutes = () => {
         <Route path="/wedding" element={<PageTransition><Wedding /></PageTransition>} />
         <Route path="/wedding/photos" element={<PageTransition><WeddingPhotos /></PageTransition>} />
         <Route path="/wedding/films" element={<PageTransition><WeddingFilms /></PageTransition>} />
+        <Route path="/wedding/films/:slug" element={<PageTransition><WeddingFilmDetail /></PageTransition>} />
         <Route path="/ad-commercials" element={<PageTransition><AdCommercials /></PageTransition>} />
         <Route path="/ad-commercials/:slug" element={<PageTransition><AdCommercialDetail /></PageTransition>} />
         <Route path="/fashion-editorial" element={<PageTransition><FashionEditorial /></PageTransition>} />

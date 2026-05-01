@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCollection } from "@/hooks/useCollection";
+import { useBlurVeil } from "@/hooks/useBlurVeil";
 
 type Credit = { label: string; value: string };
 
@@ -122,27 +123,40 @@ const FashionEditorialDetail = () => {
         </div>
       </section>
 
-      {gallery.length > 0 && (
-        <section className="px-6 md:px-10 pb-32">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {gallery.map((src, i) => (
-              <motion.figure
-                key={i}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, delay: (i % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                className={`relative overflow-hidden bg-surface ${i % 3 === 0 ? "aspect-[4/5] md:col-span-2" : "aspect-[3/4]"}`}
-              >
-                <img src={src} alt={`${e.title} ${i + 1}`} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-              </motion.figure>
-            ))}
-          </div>
-        </section>
-      )}
+      {gallery.length > 0 && <Gallery title={e.title} images={gallery} />}
 
       <OtherEditorials currentSlug={e.slug} />
     </PageShell>
+  );
+};
+
+const Gallery = ({ title, images }: { title: string; images: string[] }) => {
+  const veilRef = useBlurVeil<HTMLDivElement>();
+  return (
+    <section className="px-6 md:px-10 pb-24 md:pb-32">
+      <div className="max-w-7xl mx-auto">
+        <p className="eyebrow mb-6">Gallery</p>
+        <div ref={veilRef} className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-5 blur-veil">
+          {images.map((src, i) => (
+            <figure
+              key={i}
+              tabIndex={0}
+              className={`blur-veil-item scatter-in relative overflow-hidden bg-surface focus:outline-none ${
+                i % 5 === 0 ? "col-span-2 aspect-[16/10]" : i % 4 === 1 ? "aspect-[3/4]" : "aspect-[4/5]"
+              }`}
+              style={{
+                ["--scatter-delay" as any]: `${(i % 8) * 80}ms`,
+                ["--scatter-x" as any]: `${(i % 2 ? -1 : 1) * (4 + (i % 3) * 3)}%`,
+                ["--scatter-y" as any]: `${6 + (i % 4) * 4}%`,
+                ["--scatter-r" as any]: `${(i % 2 ? -1 : 1) * (1 + (i % 3))}deg`,
+              }}
+            >
+              <img src={src} alt={`${title} ${i + 1}`} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+            </figure>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
@@ -159,6 +173,7 @@ type EditorialPreview = {
 
 const OtherEditorials = ({ currentSlug }: { currentSlug: string }) => {
   const { items } = useCollection<EditorialPreview>("editorial_projects");
+  const veilRef = useBlurVeil<HTMLDivElement>();
   const others = items.filter((e) => e.slug !== currentSlug).slice(0, 6);
   if (!others.length) return null;
   return (
@@ -178,38 +193,34 @@ const OtherEditorials = ({ currentSlug }: { currentSlug: string }) => {
             All editorials →
           </Link>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 blur-veil">
+        <div ref={veilRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6 blur-veil">
           {others.map((o, i) => (
-            <motion.article
+            <Link
               key={o.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: (i % 3) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-              className="blur-veil-item"
+              to={`/fashion-editorial/${o.slug}`}
+              className="blur-veil-item scatter-in group block aspect-[4/5] relative overflow-hidden bg-background"
+              style={{
+                ["--scatter-delay" as any]: `${(i % 6) * 90}ms`,
+                ["--scatter-x" as any]: `${(i % 2 ? -1 : 1) * (5 + (i % 3) * 2)}%`,
+                ["--scatter-y" as any]: `${10 + (i % 3) * 4}%`,
+                ["--scatter-r" as any]: `${(i % 2 ? -1 : 1) * (1 + (i % 3))}deg`,
+              }}
             >
-              <Link to={`/fashion-editorial/${o.slug}`} className="group block aspect-[4/5] relative overflow-hidden bg-background">
-                {o.cover_url && (
-                  <img
-                    src={o.cover_url}
-                    alt={o.title}
-                    className="absolute inset-0 h-full w-full object-cover"
-                    loading="lazy"
-                  />
+              {o.cover_url && (
+                <img src={o.cover_url} alt={o.title} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                {(o.publication || o.year) && (
+                  <p className="eyebrow mb-2">
+                    {o.publication}
+                    {o.publication && o.year ? " · " : ""}
+                    {o.year}
+                  </p>
                 )}
-                <div className="absolute inset-0 bg-gradient-to-t from-background/85 via-background/10 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
-                  {(o.publication || o.year) && (
-                    <p className="eyebrow mb-2">
-                      {o.publication}
-                      {o.publication && o.year ? " · " : ""}
-                      {o.year}
-                    </p>
-                  )}
-                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl text-foreground leading-tight">{o.title}</h3>
-                </div>
-              </Link>
-            </motion.article>
+                <h3 className="font-display text-xl sm:text-2xl md:text-3xl text-foreground leading-tight">{o.title}</h3>
+              </div>
+            </Link>
           ))}
         </div>
       </div>

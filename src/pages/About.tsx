@@ -3,12 +3,26 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
 import { useSiteContent } from "@/hooks/useSiteContent";
+import { useCollection } from "@/hooks/useCollection";
+import { useBlurVeil } from "@/hooks/useBlurVeil";
+
+type AboutStory = {
+  id: string;
+  title: string;
+  eyebrow: string | null;
+  body: string | null;
+  image_url: string | null;
+  link_url: string | null;
+  sort_order: number;
+  is_visible: boolean;
+};
 
 const About = () => {
   return (
     <PageShell>
       <Hero />
       <Story />
+      <Stories />
       <Stats />
       <CTA />
     </PageShell>
@@ -92,6 +106,64 @@ const Story = () => {
           <p className="text-muted-foreground text-base md:text-lg leading-relaxed max-w-md">
             {value.body_2}
           </p>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const Stories = () => {
+  const { items: stories } = useCollection<AboutStory>("about_stories");
+  const veilRef = useBlurVeil<HTMLDivElement>();
+  const { value } = useSiteContent("page_about", {
+    stories_eyebrow: "Stories — Field notes",
+    stories_title_lead: "From the",
+    stories_title_accent: "studio",
+  });
+  if (!stories.length) return null;
+  return (
+    <section className="py-24 md:py-32 px-6 md:px-10 bg-background border-t border-border/30">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12 md:mb-16">
+          <div>
+            <p className="eyebrow mb-3">{value.stories_eyebrow}</p>
+            <h2 className="font-display text-4xl md:text-6xl text-foreground leading-[0.95]">
+              {value.stories_title_lead} <span className="italic text-primary">{value.stories_title_accent}</span>
+            </h2>
+          </div>
+        </div>
+
+        <div ref={veilRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6 blur-veil">
+          {stories.map((s, i) => {
+            const Wrapper: any = s.link_url ? "a" : "article";
+            const wrapperProps: any = s.link_url
+              ? { href: s.link_url, target: s.link_url.startsWith("http") ? "_blank" : undefined, rel: "noreferrer" }
+              : {};
+            return (
+              <Wrapper
+                key={s.id}
+                {...wrapperProps}
+                tabIndex={0}
+                className="blur-veil-item scatter-in group block relative aspect-[4/5] overflow-hidden bg-surface focus:outline-none"
+                style={{
+                  ["--scatter-delay" as any]: `${(i % 6) * 100}ms`,
+                  ["--scatter-x" as any]: `${(i % 2 ? -1 : 1) * (5 + (i % 3) * 2)}%`,
+                  ["--scatter-y" as any]: `${10 + (i % 3) * 4}%`,
+                  ["--scatter-r" as any]: `${(i % 2 ? -1 : 1) * (1 + (i % 3))}deg`,
+                }}
+              >
+                {s.image_url && (
+                  <img src={s.image_url} alt={s.title} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 md:p-6">
+                  {s.eyebrow && <p className="eyebrow mb-2">{s.eyebrow}</p>}
+                  <h3 className="font-display text-xl sm:text-2xl md:text-3xl text-foreground leading-tight">{s.title}</h3>
+                  {s.body && <p className="mt-2 text-sm text-muted-foreground line-clamp-2 max-w-xs">{s.body}</p>}
+                </div>
+              </Wrapper>
+            );
+          })}
         </div>
       </div>
     </section>
