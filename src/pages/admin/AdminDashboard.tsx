@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { toast } from "sonner";
 import {
   Loader2, LogOut, Save, Trash2, Search, ExternalLink, Mail, Copy as CopyIcon,
-  Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox,
+  Home, Film, Camera, Megaphone, Newspaper, Briefcase, Wrench, FileText, PanelBottom, Share2, Inbox, BookOpen,
 } from "lucide-react";
 import { SectionManager, FieldDef } from "@/components/admin/SectionManager";
 
