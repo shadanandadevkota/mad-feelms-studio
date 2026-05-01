@@ -9,6 +9,7 @@ import Index from "./pages/Index.tsx";
 import Wedding from "./pages/Wedding.tsx";
 import WeddingPhotos from "./pages/WeddingPhotos.tsx";
 import WeddingFilms from "./pages/WeddingFilms.tsx";
+import WeddingFilmDetail from "./pages/WeddingFilmDetail.tsx";
 import AdCommercials from "./pages/AdCommercials.tsx";
 import AdCommercialDetail from "./pages/AdCommercialDetail.tsx";
 import FashionEditorial from "./pages/FashionEditorial.tsx";
