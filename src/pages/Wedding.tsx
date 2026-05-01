@@ -191,30 +191,36 @@ const FilmsPreview = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6 blur-veil">
-          {preview.map((f, i) => (
-            <motion.article
-              key={f.id}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="blur-veil-item group relative aspect-[3/4] overflow-hidden bg-surface"
-            >
-              {f.image_url && (
-                <img
-                  src={f.image_url}
-                  alt={`${f.title} wedding film`}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  loading="lazy"
-                />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6">
-                <p className="eyebrow mb-2">{f.place}{f.place && f.year ? " · " : ""}{f.year}</p>
-                <h3 className="font-display text-2xl md:text-3xl text-foreground">{f.title}</h3>
-              </div>
-            </motion.article>
-          ))}
+          {preview.map((f, i) => {
+            const Wrapper: any = f.slug ? Link : "div";
+            const wrapperProps: any = f.slug ? { to: `/wedding/films/${f.slug}` } : {};
+            return (
+              <motion.div
+                key={f.id}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="blur-veil-item group relative aspect-[3/4] overflow-hidden bg-surface"
+              >
+                <Wrapper {...wrapperProps} className="block absolute inset-0">
+                  {f.image_url && (
+                    <img
+                      src={f.image_url}
+                      alt={`${f.title} wedding film`}
+                      className="absolute inset-0 h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-transparent to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <p className="eyebrow mb-2">{f.place}{f.place && f.year ? " · " : ""}{f.year}</p>
+                    <h3 className="font-display text-2xl md:text-3xl text-foreground">{f.title}</h3>
+                  </div>
+                </Wrapper>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>
