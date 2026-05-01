@@ -123,24 +123,7 @@ const FashionEditorialDetail = () => {
         </div>
       </section>
 
-      {gallery.length > 0 && (
-        <section className="px-6 md:px-10 pb-32">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-            {gallery.map((src, i) => (
-              <motion.figure
-                key={i}
-                initial={{ opacity: 0, y: 60 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.9, delay: (i % 2) * 0.08, ease: [0.16, 1, 0.3, 1] }}
-                className={`relative overflow-hidden bg-surface ${i % 3 === 0 ? "aspect-[4/5] md:col-span-2" : "aspect-[3/4]"}`}
-              >
-                <img src={src} alt={`${e.title} ${i + 1}`} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
-              </motion.figure>
-            ))}
-          </div>
-        </section>
-      )}
+      {gallery.length > 0 && <Gallery title={e.title} images={gallery} />}
 
       <OtherEditorials currentSlug={e.slug} />
     </PageShell>
