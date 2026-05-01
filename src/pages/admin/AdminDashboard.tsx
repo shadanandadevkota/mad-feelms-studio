@@ -536,6 +536,16 @@ const AdminDashboard = () => {
             />
           </TabsContent>
 
+          <TabsContent value="about-stories">
+            <SectionManager
+              table="about_stories"
+              title="About — Stories"
+              fields={ABOUT_STORY_FIELDS}
+              defaults={{ title: "New story", eyebrow: "", body: "", image_url: "", link_url: "" }}
+              renderLabel={(it) => `${it.title}${it.eyebrow ? ` · ${it.eyebrow}` : ""}`}
+            />
+          </TabsContent>
+
           <TabsContent value="pages">
             <div className="grid gap-6">
               {PAGE_KEYS.map(({ key, label, fields }) => (
