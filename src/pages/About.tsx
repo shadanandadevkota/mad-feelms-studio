@@ -3,12 +3,26 @@ import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
 import { useSiteContent } from "@/hooks/useSiteContent";
+import { useCollection } from "@/hooks/useCollection";
+import { useBlurVeil } from "@/hooks/useBlurVeil";
+
+type AboutStory = {
+  id: string;
+  title: string;
+  eyebrow: string | null;
+  body: string | null;
+  image_url: string | null;
+  link_url: string | null;
+  sort_order: number;
+  is_visible: boolean;
+};
 
 const About = () => {
   return (
     <PageShell>
       <Hero />
       <Story />
+      <Stories />
       <Stats />
       <CTA />
     </PageShell>
