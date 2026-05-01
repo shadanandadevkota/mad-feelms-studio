@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { PageShell } from "@/components/site/PageShell";
 import { supabase } from "@/integrations/supabase/client";
 import { useCollection } from "@/hooks/useCollection";
+import { useBlurVeil } from "@/hooks/useBlurVeil";
 
 type Credit = { label: string; value: string };
 
