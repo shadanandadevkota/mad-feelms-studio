@@ -6,7 +6,7 @@ import { useSiteContent } from "@/hooks/useSiteContent";
 import { useCollection } from "@/hooks/useCollection";
 
 type Photo = { id: string; image_url: string; col_span: string; aspect: string; caption: string | null; sort_order: number; is_visible: boolean };
-type Film = { id: string; title: string; place: string | null; year: string | null; image_url: string | null; sort_order: number; is_visible: boolean };
+type Film = { id: string; slug: string | null; title: string; place: string | null; year: string | null; image_url: string | null; sort_order: number; is_visible: boolean };
 
 const Wedding = () => {
   return (
